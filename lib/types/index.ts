@@ -1,25 +1,26 @@
-export type AgentName = 
-  | 'COMMERCE_AGENT' 
-  | 'GROWTH_AGENT' 
-  | 'CAMPAIGN_AGENT' 
-  | 'POLICY_ENGINE' 
-  | 'ORCHESTRATOR';
+export type AgentName =
+  | "COMMERCE_AGENT"
+  | "GROWTH_AGENT"
+  | "CAMPAIGN_AGENT"
+  | "POLICY_ENGINE"
+  | "ORCHESTRATOR";
 
-export type AgentActionType = 
-  | 'RECOMMEND_PRODUCT'
-  | 'ADD_UPSELL'
-  | 'DETECT_ABANDONMENT'
-  | 'CALCULATE_INTENT'
-  | 'CREATE_CAMPAIGN'
-  | 'SEND_CAMPAIGN'
-  | 'CREATE_ORDER'
-  | 'INITIATE_PAYMENT'
-  | 'VERIFY_PAYMENT'
-  | 'POLICY_CHECK';
+export type AgentActionType =
+  | "RECOMMEND_PRODUCT"
+  | "ADD_UPSELL"
+  | "DETECT_ABANDONMENT"
+  | "CALCULATE_INTENT"
+  | "CREATE_CAMPAIGN"
+  | "SEND_CAMPAIGN"
+  | "CREATE_ORDER"
+  | "INITIATE_PAYMENT"
+  | "VERIFY_PAYMENT"
+  | "POLICY_CHECK";
 
-export type PolicyStatus = 'ALLOWED' | 'BLOCKED' | 'REQUIRES_APPROVAL';
+export type PolicyStatus = "ALLOWED" | "BLOCKED" | "REQUIRES_APPROVAL";
 
-export type AuditLogType = 'EVENT' | 'REASONING' | 'POLICY' | 'ACTION' | 'SUCCESS' | 'FAILURE';
+export type AuditLogType =
+  "EVENT" | "REASONING" | "POLICY" | "ACTION" | "SUCCESS" | "FAILURE";
 
 export interface ProductAttribute {
   waterproof?: boolean;
@@ -92,7 +93,7 @@ export interface Cart {
   customerId: string;
   customer?: Customer;
   items: CartItem[];
-  status: 'ACTIVE' | 'ABANDONED' | 'RESTORED' | 'CONVERTED';
+  status: "ACTIVE" | "ABANDONED" | "RESTORED" | "CONVERTED";
   inactivityDuration: number; // in minutes
   productViews: number;
   timeSpentMinutes: number;
@@ -112,7 +113,7 @@ export interface IntentScoreBreakdown {
     recentActivity: { points: number; max: 10; reason: string };
   };
   summary: string;
-  level: 'High' | 'Medium' | 'Low';
+  level: "High" | "Medium" | "Low";
 }
 
 export interface PolicyCheckResult {
@@ -140,7 +141,7 @@ export interface AgentActionRecord {
   reason: string;
   confidence: number;
   policyStatus: PolicyStatus;
-  result: 'SUCCESS' | 'FAILED' | 'PENDING' | 'BLOCKED';
+  result: "SUCCESS" | "FAILED" | "PENDING" | "BLOCKED";
   payload?: any;
 }
 
@@ -159,12 +160,12 @@ export interface RevenueOpportunity {
   cartId: string;
   customerName: string;
   cartValue: number;
-  customerIntent: 'High' | 'Medium' | 'Low';
+  customerIntent: "High" | "Medium" | "Low";
   intentScore: number;
-  urgency: 'High' | 'Medium' | 'Normal';
+  urgency: "High" | "Medium" | "Normal";
   recommendedAction: string;
   reasoning: string;
-  status: 'OPEN' | 'EXECUTED' | 'DISMISSED';
+  status: "OPEN" | "EXECUTED" | "DISMISSED";
   createdAt: string;
 }
 
@@ -179,15 +180,15 @@ export interface CampaignMessage {
   ctaText: string;
   ctaUrl: string;
   discountPercent: number;
-  deliveryStatus: 'SENT' | 'DELIVERED' | 'FAILED';
+  deliveryStatus: "SENT" | "DELIVERED" | "FAILED";
   deliveryError?: string;
   clicked?: boolean;
   createdAt: string;
 }
 
 export interface OrchestrationStep {
-  step: 'OBSERVE' | 'REASON' | 'POLICY_CHECK' | 'ACT' | 'VERIFY' | 'LEARN';
-  status: 'PENDING' | 'IN_PROGRESS' | 'COMPLETED' | 'BLOCKED' | 'FAILED';
+  step: "OBSERVE" | "REASON" | "POLICY_CHECK" | "ACT" | "VERIFY" | "LEARN";
+  status: "PENDING" | "IN_PROGRESS" | "COMPLETED" | "BLOCKED" | "FAILED";
   description: string;
   detail?: string;
   data?: any;

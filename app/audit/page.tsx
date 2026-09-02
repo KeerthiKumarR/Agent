@@ -1,33 +1,33 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import { 
-  FileText, 
-  Filter, 
-  RotateCcw, 
-  Search, 
-  ChevronRight, 
-  Eye, 
-  X, 
-  Code2, 
-  ShieldCheck, 
+import React, { useState, useEffect } from "react";
+import {
+  FileText,
+  Filter,
+  RotateCcw,
+  Search,
+  ChevronRight,
+  Eye,
+  X,
+  Code2,
+  ShieldCheck,
   Sparkles,
   Download,
-  Clock
-} from 'lucide-react';
-import AuditBadge from '@/components/AuditBadge';
-import { AuditLogEntry, AuditLogType } from '@/lib/types';
+  Clock,
+} from "lucide-react";
+import AuditBadge from "@/components/AuditBadge";
+import { AuditLogEntry, AuditLogType } from "@/lib/types";
 
 export default function AuditTrailPage() {
   const [logs, setLogs] = useState<AuditLogEntry[]>([]);
-  const [activeFilter, setActiveFilter] = useState<string>('ALL');
-  const [searchQuery, setSearchQuery] = useState('');
+  const [activeFilter, setActiveFilter] = useState<string>("ALL");
+  const [searchQuery, setSearchQuery] = useState("");
   const [selectedLog, setSelectedLog] = useState<AuditLogEntry | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchLogs = async () => {
     try {
-      const res = await fetch('/api/audit');
+      const res = await fetch("/api/audit");
       if (res.ok) {
         const data = await res.json();
         setLogs(data.logs || []);
@@ -46,17 +46,17 @@ export default function AuditTrailPage() {
   }, []);
 
   const filterOptions = [
-    { label: 'All Logs', value: 'ALL' },
-    { label: 'Customer Events', value: 'EVENT' },
-    { label: 'Agent Reasoning', value: 'REASONING' },
-    { label: 'Policy Checks', value: 'POLICY' },
-    { label: 'Agent Actions', value: 'ACTION' },
-    { label: 'Successes', value: 'SUCCESS' },
-    { label: 'Failures / Blocked', value: 'FAILURE' },
+    { label: "All Logs", value: "ALL" },
+    { label: "Customer Events", value: "EVENT" },
+    { label: "Agent Reasoning", value: "REASONING" },
+    { label: "Policy Checks", value: "POLICY" },
+    { label: "Agent Actions", value: "ACTION" },
+    { label: "Successes", value: "SUCCESS" },
+    { label: "Failures / Blocked", value: "FAILURE" },
   ];
 
-  const filteredLogs = logs.filter(log => {
-    if (activeFilter !== 'ALL' && log.type !== activeFilter) return false;
+  const filteredLogs = logs.filter((log) => {
+    if (activeFilter !== "ALL" && log.type !== activeFilter) return false;
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
       return (
@@ -70,9 +70,9 @@ export default function AuditTrailPage() {
 
   const handleExportJson = () => {
     const jsonStr = JSON.stringify(logs, null, 2);
-    const blob = new Blob([jsonStr], { type: 'application/json' });
+    const blob = new Blob([jsonStr], { type: "application/json" });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
+    const a = document.createElement("a");
     a.href = url;
     a.download = `commercepilot-audit-${Date.now()}.json`;
     a.click();
@@ -81,7 +81,6 @@ export default function AuditTrailPage() {
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-      
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-border">
         <div>
@@ -95,7 +94,8 @@ export default function AuditTrailPage() {
             </span>
           </div>
           <p className="text-xs text-text-muted mt-1">
-            Every customer signal, reasoning factor, policy boundary decision, and payment action recorded with complete explainability.
+            Every customer signal, reasoning factor, policy boundary decision,
+            and payment action recorded with complete explainability.
           </p>
         </div>
 
@@ -119,7 +119,6 @@ export default function AuditTrailPage() {
 
       {/* SEARCH & FILTER BAR */}
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-surface p-2.5 rounded-2xl border border-border">
-        
         {/* Search */}
         <div className="relative w-full sm:w-72">
           <Search className="w-4 h-4 text-text-muted absolute left-3 top-1/2 -translate-y-1/2" />
@@ -140,15 +139,14 @@ export default function AuditTrailPage() {
               onClick={() => setActiveFilter(opt.value)}
               className={`px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${
                 activeFilter === opt.value
-                  ? 'bg-primary text-white shadow-sm shadow-primary/20'
-                  : 'text-text-muted hover:text-white hover:bg-surface-elevated'
+                  ? "bg-primary text-white shadow-sm shadow-primary/20"
+                  : "text-text-muted hover:text-white hover:bg-surface-elevated"
               }`}
             >
               {opt.label}
             </button>
           ))}
         </div>
-
       </div>
 
       {/* TIMELINE LIST */}
@@ -179,7 +177,8 @@ export default function AuditTrailPage() {
                     )}
                     <span className="text-[11px] font-mono text-text-muted flex items-center gap-1">
                       <Clock className="w-3 h-3" />
-                      {new Date(log.timestamp).toLocaleTimeString()} • {new Date(log.timestamp).toLocaleDateString()}
+                      {new Date(log.timestamp).toLocaleTimeString()} •{" "}
+                      {new Date(log.timestamp).toLocaleDateString()}
                     </span>
                   </div>
 
@@ -213,7 +212,6 @@ export default function AuditTrailPage() {
       {selectedLog && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-in fade-in">
           <div className="w-full max-w-2xl bg-surface-elevated border border-border rounded-2xl shadow-2xl p-6 space-y-4 max-h-[85vh] flex flex-col">
-            
             <div className="flex items-center justify-between pb-3 border-b border-border">
               <div className="flex items-center gap-2.5">
                 <AuditBadge type={selectedLog.type} size="sm" />
@@ -258,11 +256,9 @@ export default function AuditTrailPage() {
                 Close Inspector
               </button>
             </div>
-
           </div>
         </div>
       )}
-
     </div>
   );
 }

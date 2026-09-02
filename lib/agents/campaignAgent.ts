@@ -1,12 +1,12 @@
-import { Cart, Customer, Product, CampaignMessage } from '../types';
-import { growthAgent } from './growthAgent';
-import { policyEngine } from './policyEngine';
-import { defaultCampaignProvider } from '../campaign/provider';
-import { db } from '../db';
-import { generateAICompletion } from '../ai/llm';
+import { Cart, Customer, Product, CampaignMessage } from "../types";
+import { growthAgent } from "./growthAgent";
+import { policyEngine } from "./policyEngine";
+import { defaultCampaignProvider } from "../campaign/provider";
+import { db } from "../db";
+import { generateAICompletion } from "../ai/llm";
 
 export interface CampaignDecision {
-  decision: 'SEND_CAMPAIGN' | 'WAIT' | 'DO_NOT_CONTACT';
+  decision: "SEND_CAMPAIGN" | "WAIT" | "DO_NOT_CONTACT";
   reason: string;
   confidence: number;
   intentScore: number;
@@ -16,32 +16,36 @@ export const campaignAgent = {
   /**
    * Evaluates if a cart warrants proactive campaign intervention
    */
-  evaluateOutreach: async (cart: Cart, customer: Customer): Promise<CampaignDecision> => {
+  evaluateOutreach: async (
+    cart: Cart,
+    customer: Customer,
+  ): Promise<CampaignDecision> => {
     const intent = growthAgent.calculateIntentScore(cart);
 
     if (intent.score < 40) {
       return {
-        decision: 'DO_NOT_CONTACT',
-        reason: 'Customer purchase intent is low. Proactive messaging would be intrusive.',
+        decision: "DO_NOT_CONTACT",
+        reason:
+          "Customer purchase intent is low. Proactive messaging would be intrusive.",
         confidence: 0.89,
-        intentScore: intent.score
+        intentScore: intent.score,
       };
     }
 
     if (cart.inactivityDuration < 30) {
       return {
-        decision: 'WAIT',
+        decision: "WAIT",
         reason: `Cart inactive for only ${cart.inactivityDuration}m. Customer may still be comparing options actively.`,
         confidence: 0.85,
-        intentScore: intent.score
+        intentScore: intent.score,
       };
     }
 
     return {
-      decision: 'SEND_CAMPAIGN',
+      decision: "SEND_CAMPAIGN",
       reason: `Customer demonstrates high purchase intent (${intent.score}%) and has not received outreach recently.`,
       confidence: 0.94,
-      intentScore: intent.score
+      intentScore: intent.score,
     };
   },
 
@@ -49,11 +53,11 @@ export const campaignAgent = {
    * Generates helpful, intelligent, non-aggressive WhatsApp copy with LLM and semantic fallback
    */
   generateCampaign: async (
-    cart: Cart, 
-    customer: Customer, 
-    primaryProduct: Product
+    cart: Cart,
+    customer: Customer,
+    primaryProduct: Product,
   ): Promise<{ message: string; ctaText: string; ctaUrl: string }> => {
-    const firstName = customer.name.split(' ')[0] || 'there';
+    const firstName = customer.name.split(" ")[0] || "there";
     const ctaText = "View My Cart";
     const ctaUrl = `/checkout?cartId=${cart.id}&restored=true`;
 
@@ -67,13 +71,17 @@ Rules:
 
     const userPrompt = `Customer: ${customer.name}. Product: ${primaryProduct.name} (₹${primaryProduct.price}). Dwell time: ${cart.timeSpentMinutes} mins. Views: ${cart.productViews}x. Attributes: ${JSON.stringify(primaryProduct.attributes)}.`;
 
-    const llmRes = await generateAICompletion({ systemPrompt, userPrompt, temperature: 0.7 });
+    const llmRes = await generateAICompletion({
+      systemPrompt,
+      userPrompt,
+      temperature: 0.7,
+    });
 
     if (llmRes.text) {
       return {
         message: llmRes.text,
         ctaText,
-        ctaUrl
+        ctaUrl,
       };
     }
 
@@ -92,40 +100,53 @@ Rules:
     return {
       message: copy,
       ctaText,
-      ctaUrl
+      ctaUrl,
     };
   },
 
   /**
    * Orchestrates sending campaign with policy verification
    */
-  dispatchCampaign: async (cart: Cart, customer: Customer, simulateFailure = false): Promise<CampaignMessage> => {
+  dispatchCampaign: async (
+    cart: Cart,
+    customer: Customer,
+    simulateFailure = false,
+  ): Promise<CampaignMessage> => {
     const primaryItem = cart.items[0];
-    const product = primaryItem ? primaryItem.product : (await db.getProducts())[0];
+    const product = primaryItem
+      ? primaryItem.product
+      : (await db.getProducts())[0];
 
     // 1. Gated Policy Check (Deterministic Rule Engine)
     const policyResult = await policyEngine.evaluate({
-      actionType: 'SEND_CAMPAIGN',
+      actionType: "SEND_CAMPAIGN",
       cart,
-      customer
+      customer,
     });
 
-    if (policyResult.status === 'BLOCKED') {
+    if (policyResult.status === "BLOCKED") {
       throw new Error(`Policy Blocked Campaign: ${policyResult.reason}`);
     }
 
     // 2. Generate Copy (LLM / Semantic)
-    const generated = await campaignAgent.generateCampaign(cart, customer, product);
+    const generated = await campaignAgent.generateCampaign(
+      cart,
+      customer,
+      product,
+    );
 
     // 3. Send via Provider
-    const providerResult = await defaultCampaignProvider.sendMessage({
-      to: customer.phone,
-      recipientName: customer.name,
-      message: generated.message,
-      mediaUrl: product.image,
-      ctaText: generated.ctaText,
-      ctaUrl: generated.ctaUrl
-    }, simulateFailure);
+    const providerResult = await defaultCampaignProvider.sendMessage(
+      {
+        to: customer.phone,
+        recipientName: customer.name,
+        message: generated.message,
+        mediaUrl: product.image,
+        ctaText: generated.ctaText,
+        ctaUrl: generated.ctaUrl,
+      },
+      simulateFailure,
+    );
 
     const campaignRecord: CampaignMessage = {
       id: `camp_${Date.now()}`,
@@ -141,10 +162,10 @@ Rules:
       deliveryStatus: providerResult.status,
       deliveryError: providerResult.error,
       clicked: false,
-      createdAt: new Date().toISOString()
+      createdAt: new Date().toISOString(),
     };
 
     await db.saveCampaign(campaignRecord);
     return campaignRecord;
-  }
+  },
 };

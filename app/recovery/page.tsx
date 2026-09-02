@@ -1,48 +1,51 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { 
-  RotateCcw, 
-  Brain, 
-  ShieldCheck, 
-  Send, 
-  CheckCircle2, 
-  XCircle, 
-  AlertCircle, 
-  Clock, 
-  Eye, 
-  TrendingUp, 
-  Loader2, 
-  Zap, 
+import React, { useState, useEffect } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import {
+  RotateCcw,
+  Brain,
+  ShieldCheck,
+  Send,
+  CheckCircle2,
+  XCircle,
+  AlertCircle,
+  Clock,
+  Eye,
+  TrendingUp,
+  Loader2,
+  Zap,
   ArrowRight,
   Sliders,
-  Sparkles
-} from 'lucide-react';
-import AgentThinking, { WorkflowStepData } from '@/components/AgentThinking';
-import { Cart } from '@/lib/types';
-import { OrchestrationResult } from '@/lib/agents/agentOrchestrator';
+  Sparkles,
+} from "lucide-react";
+import AgentThinking, { WorkflowStepData } from "@/components/AgentThinking";
+import { Cart } from "@/lib/types";
+import { OrchestrationResult } from "@/lib/agents/agentOrchestrator";
 
 export default function AbandonedCartRecoveryPage() {
   const [carts, setCarts] = useState<Cart[]>([]);
   const [selectedCart, setSelectedCart] = useState<Cart | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [analysisResult, setAnalysisResult] = useState<OrchestrationResult | null>(null);
-  const [workflowSteps, setWorkflowSteps] = useState<WorkflowStepData[] | null>(null);
+  const [analysisResult, setAnalysisResult] =
+    useState<OrchestrationResult | null>(null);
+  const [workflowSteps, setWorkflowSteps] = useState<WorkflowStepData[] | null>(
+    null,
+  );
   const [currentStepIndex, setCurrentStepIndex] = useState<number>(0);
   const router = useRouter();
 
   const fetchAbandonedCarts = async () => {
     try {
-      const res = await fetch('/api/merchant');
+      const res = await fetch("/api/merchant");
       if (res.ok) {
         const data = await res.json();
         // Load initial carts
-        const cartRes = await fetch('/api/cart');
+        const cartRes = await fetch("/api/cart");
         const activeData = await cartRes.json();
-        
+
         // Build mock abandoned carts list from server
         const demoCarts: Cart[] = [
           {
@@ -53,7 +56,7 @@ export default function AbandonedCartRecoveryPage() {
               name: "Rohan Sharma",
               email: "rohan.sharma@example.com",
               phone: "+91 98765 43210",
-              messagesSentThisWeek: 1
+              messagesSentThisWeek: 1,
             },
             items: [
               {
@@ -68,14 +71,18 @@ export default function AbandonedCartRecoveryPage() {
                   category: "Running Shoes",
                   description: "HydroShield waterproof membrane running shoes",
                   features: ["100% Waterproof", "Nitrogen EVA Midsole"],
-                  attributes: { waterproof: true, usage: ["running", "outdoor"] },
-                  image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=400&q=80",
+                  attributes: {
+                    waterproof: true,
+                    usage: ["running", "outdoor"],
+                  },
+                  image:
+                    "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=400&q=80",
                   stock: 18,
-                  tags: ["shoes", "running", "waterproof"]
+                  tags: ["shoes", "running", "waterproof"],
                 },
                 quantity: 1,
-                price: 4999
-              }
+                price: 4999,
+              },
             ],
             status: "ABANDONED",
             inactivityDuration: 120,
@@ -84,7 +91,7 @@ export default function AbandonedCartRecoveryPage() {
             checkoutInitiated: true,
             total: 4999,
             createdAt: new Date(Date.now() - 3600000 * 2).toISOString(),
-            updatedAt: new Date(Date.now() - 3600000 * 2).toISOString()
+            updatedAt: new Date(Date.now() - 3600000 * 2).toISOString(),
           },
           {
             id: "cart_abandoned_02",
@@ -94,7 +101,7 @@ export default function AbandonedCartRecoveryPage() {
               name: "Priya Patel",
               email: "priya.patel@example.com",
               phone: "+91 98123 45678",
-              messagesSentThisWeek: 0
+              messagesSentThisWeek: 0,
             },
             items: [
               {
@@ -110,13 +117,14 @@ export default function AbandonedCartRecoveryPage() {
                   description: "Rugged high-performance trail running shoes",
                   features: ["5mm Aggressive Lugs", "Carbon Rock Plate"],
                   attributes: { waterproof: true, usage: ["trail", "hiking"] },
-                  image: "https://images.unsplash.com/photo-1551107696-a4b0c5a0d9a2?auto=format&fit=crop&w=400&q=80",
+                  image:
+                    "https://images.unsplash.com/photo-1551107696-a4b0c5a0d9a2?auto=format&fit=crop&w=400&q=80",
                   stock: 12,
-                  tags: ["shoes", "trail", "waterproof"]
+                  tags: ["shoes", "trail", "waterproof"],
                 },
                 quantity: 1,
-                price: 5799
-              }
+                price: 5799,
+              },
             ],
             status: "ABANDONED",
             inactivityDuration: 45,
@@ -125,8 +133,8 @@ export default function AbandonedCartRecoveryPage() {
             checkoutInitiated: true,
             total: 5799,
             createdAt: new Date(Date.now() - 60000 * 45).toISOString(),
-            updatedAt: new Date(Date.now() - 60000 * 45).toISOString()
-          }
+            updatedAt: new Date(Date.now() - 60000 * 45).toISOString(),
+          },
         ];
         setCarts(demoCarts);
         setSelectedCart(demoCarts[0]);
@@ -147,24 +155,24 @@ export default function AbandonedCartRecoveryPage() {
     setCurrentStepIndex(0);
 
     try {
-      const res = await fetch('/api/agent/orchestrate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ cartId: cart.id })
+      const res = await fetch("/api/agent/orchestrate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ cartId: cart.id }),
       });
 
       if (res.ok) {
         const data: OrchestrationResult = await res.json();
         setAnalysisResult(data);
-        
+
         // Map backend orchestration steps to visual component steps
         const mappedSteps: WorkflowStepData[] = data.steps.map((s, idx) => ({
           step: s.step,
           status: s.status,
-          title: `${idx + 1}. ${s.step.replace('_', ' ')}`,
+          title: `${idx + 1}. ${s.step.replace("_", " ")}`,
           description: s.description,
           detail: s.detail,
-          meta: s.data
+          meta: s.data,
         }));
 
         setWorkflowSteps(mappedSteps);
@@ -179,7 +187,6 @@ export default function AbandonedCartRecoveryPage() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-      
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-border">
         <div>
@@ -193,7 +200,8 @@ export default function AbandonedCartRecoveryPage() {
             </span>
           </div>
           <p className="text-xs text-text-muted mt-1">
-            Observe → Reason → Policy Check → Act → Verify → Learn. The agent calculates intent and checks merchant boundaries before intervening.
+            Observe → Reason → Policy Check → Act → Verify → Learn. The agent
+            calculates intent and checks merchant boundaries before intervening.
           </p>
         </div>
 
@@ -218,11 +226,12 @@ export default function AbandonedCartRecoveryPage() {
 
       {/* TWO-COLUMN WORKSPACE */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        
         {/* LEFT COLUMN: ABANDONED CARTS QUEUE (5 COLS) */}
         <div className="lg:col-span-5 space-y-4">
           <div className="flex items-center justify-between text-xs text-text-muted">
-            <span className="font-mono font-bold uppercase">Active Abandoned Carts ({carts.length})</span>
+            <span className="font-mono font-bold uppercase">
+              Active Abandoned Carts ({carts.length})
+            </span>
             <span>Click to inspect</span>
           </div>
 
@@ -230,16 +239,16 @@ export default function AbandonedCartRecoveryPage() {
             {carts.map((cart) => {
               const item = cart.items[0];
               const isSelected = selectedCart?.id === cart.id;
-              const intentScore = cart.id === 'cart_abandoned_01' ? 87 : 92;
+              const intentScore = cart.id === "cart_abandoned_01" ? 87 : 92;
 
               return (
                 <div
                   key={cart.id}
                   onClick={() => setSelectedCart(cart)}
                   className={`p-4 rounded-2xl border cursor-pointer transition-all duration-200 space-y-3 ${
-                    isSelected 
-                      ? 'bg-surface-elevated border-primary shadow-lg shadow-primary/10 ring-1 ring-primary/40' 
-                      : 'bg-surface/80 border-border hover:border-border/80'
+                    isSelected
+                      ? "bg-surface-elevated border-primary shadow-lg shadow-primary/10 ring-1 ring-primary/40"
+                      : "bg-surface/80 border-border hover:border-border/80"
                   }`}
                 >
                   <div className="flex items-start justify-between gap-3">
@@ -262,7 +271,7 @@ export default function AbandonedCartRecoveryPage() {
                           {item?.product.name}
                         </div>
                         <div className="text-xs font-bold text-accent-cyan mt-0.5">
-                          ₹{cart.total.toLocaleString('en-IN')}
+                          ₹{cart.total.toLocaleString("en-IN")}
                         </div>
                       </div>
                     </div>
@@ -279,7 +288,8 @@ export default function AbandonedCartRecoveryPage() {
 
                   <div className="pt-2 border-t border-border/60 flex items-center justify-between">
                     <span className="text-[10px] text-text-muted">
-                      Views: {cart.productViews} • Dwell: {cart.timeSpentMinutes}m
+                      Views: {cart.productViews} • Dwell:{" "}
+                      {cart.timeSpentMinutes}m
                     </span>
                     <button
                       onClick={(e) => {
@@ -301,7 +311,6 @@ export default function AbandonedCartRecoveryPage() {
 
         {/* RIGHT COLUMN: DETAILED 6-STEP AGENT REASONING WORKSPACE (7 COLS) */}
         <div className="lg:col-span-7 space-y-6">
-          
           {selectedCart && (
             <>
               {/* Telemetry Summary Card */}
@@ -314,30 +323,42 @@ export default function AbandonedCartRecoveryPage() {
                     </h3>
                   </div>
                   <span className="text-xs font-mono text-text-muted">
-                    Target: {selectedCart.customer?.name} ({selectedCart.customer?.phone})
+                    Target: {selectedCart.customer?.name} (
+                    {selectedCart.customer?.phone})
                   </span>
                 </div>
 
                 {/* 5 Transparent Scoring Factors */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
                   <div className="p-2.5 rounded-lg bg-surface border border-border flex items-center justify-between">
-                    <span className="text-text-secondary">✓ Product Views ({selectedCart.productViews}x):</span>
+                    <span className="text-text-secondary">
+                      ✓ Product Views ({selectedCart.productViews}x):
+                    </span>
                     <span className="font-bold text-emerald-400">+30 pts</span>
                   </div>
                   <div className="p-2.5 rounded-lg bg-surface border border-border flex items-center justify-between">
-                    <span className="text-text-secondary">✓ Added to Cart:</span>
+                    <span className="text-text-secondary">
+                      ✓ Added to Cart:
+                    </span>
                     <span className="font-bold text-emerald-400">+25 pts</span>
                   </div>
                   <div className="p-2.5 rounded-lg bg-surface border border-border flex items-center justify-between">
-                    <span className="text-text-secondary">✓ Checkout Reached:</span>
+                    <span className="text-text-secondary">
+                      ✓ Checkout Reached:
+                    </span>
                     <span className="font-bold text-emerald-400">+20 pts</span>
                   </div>
                   <div className="p-2.5 rounded-lg bg-surface border border-border flex items-center justify-between">
-                    <span className="text-text-secondary">✓ Cart Value (&gt; ₹4k):</span>
+                    <span className="text-text-secondary">
+                      ✓ Cart Value (&gt; ₹4k):
+                    </span>
                     <span className="font-bold text-emerald-400">+10 pts</span>
                   </div>
                   <div className="p-2.5 rounded-lg bg-surface border border-border flex items-center justify-between sm:col-span-2">
-                    <span className="text-text-secondary">✓ Recent Activity ({selectedCart.inactivityDuration}m window):</span>
+                    <span className="text-text-secondary">
+                      ✓ Recent Activity ({selectedCart.inactivityDuration}m
+                      window):
+                    </span>
                     <span className="font-bold text-emerald-400">+2 pts</span>
                   </div>
                 </div>
@@ -345,8 +366,12 @@ export default function AbandonedCartRecoveryPage() {
                 {/* Intent Score Bar */}
                 <div className="p-3.5 rounded-xl bg-surface-elevated border border-primary/30 flex items-center justify-between">
                   <div>
-                    <div className="text-xs font-bold text-white">Calculated Intent Score:</div>
-                    <div className="text-[11px] text-text-muted">High probability of recovery via non-aggressive message.</div>
+                    <div className="text-xs font-bold text-white">
+                      Calculated Intent Score:
+                    </div>
+                    <div className="text-[11px] text-text-muted">
+                      High probability of recovery via non-aggressive message.
+                    </div>
                   </div>
                   <div className="text-2xl font-extrabold text-accent-cyan font-mono">
                     87 <span className="text-xs text-text-muted">/ 100</span>
@@ -375,26 +400,23 @@ export default function AbandonedCartRecoveryPage() {
                     Personalized WhatsApp Campaign Generated
                   </div>
                   <div className="text-[11px] text-text-secondary">
-                    Review non-aggressive message copy, phone mockup, and interactive restoration CTA.
+                    Review non-aggressive message copy, phone mockup, and
+                    interactive restoration CTA.
                   </div>
                 </div>
 
                 <button
-                  onClick={() => router.push('/campaigns')}
+                  onClick={() => router.push("/campaigns")}
                   className="px-4 py-2 rounded-xl bg-primary hover:bg-primary-hover text-white text-xs font-bold transition-all shadow-md flex items-center gap-1 whitespace-nowrap"
                 >
                   <span>Open Campaign Composer</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </button>
               </div>
-
             </>
           )}
-
         </div>
-
       </div>
-
     </div>
   );
 }

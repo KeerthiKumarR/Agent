@@ -1,6 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/db';
-import { campaignAgent } from '@/lib/agents/campaignAgent';
+import { NextRequest, NextResponse } from "next/server";
+import { db } from "@/lib/db";
+import { campaignAgent } from "@/lib/agents/campaignAgent";
 
 export async function GET() {
   try {
@@ -15,12 +15,15 @@ export async function POST(req: NextRequest) {
   try {
     const { cartId, simulateFailure = false } = await req.json();
     if (!cartId) {
-      return NextResponse.json({ error: 'cartId is required' }, { status: 400 });
+      return NextResponse.json(
+        { error: "cartId is required" },
+        { status: 400 },
+      );
     }
 
     const cart = await db.getCartById(cartId);
     if (!cart) {
-      return NextResponse.json({ error: 'Cart not found' }, { status: 404 });
+      return NextResponse.json({ error: "Cart not found" }, { status: 404 });
     }
 
     const customer = (await db.getCustomer(cart.customerId)) || {
@@ -29,10 +32,14 @@ export async function POST(req: NextRequest) {
       email: "rohan.sharma@example.com",
       phone: "+91 98765 43210",
       messagesSentThisWeek: 1,
-      lastMessageAt: null
+      lastMessageAt: null,
     };
 
-    const campaign = await campaignAgent.dispatchCampaign(cart, customer, simulateFailure);
+    const campaign = await campaignAgent.dispatchCampaign(
+      cart,
+      customer,
+      simulateFailure,
+    );
 
     return NextResponse.json({ campaign });
   } catch (error: any) {

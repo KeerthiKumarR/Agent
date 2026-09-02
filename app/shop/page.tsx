@@ -1,26 +1,26 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect, useRef } from 'react';
-import Image from 'next/image';
-import { useRouter } from 'next/navigation';
-import { 
-  Bot, 
-  Send, 
-  Sparkles, 
-  ShoppingCart, 
-  CheckCircle2, 
-  Layers, 
-  Code2, 
-  ArrowRight, 
-  Loader2, 
-  Zap, 
+import React, { useState, useEffect, useRef } from "react";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import {
+  Bot,
+  Send,
+  Sparkles,
+  ShoppingCart,
+  CheckCircle2,
+  Layers,
+  Code2,
+  ArrowRight,
+  Loader2,
+  Zap,
   Info,
-  ShieldCheck
-} from 'lucide-react';
-import { Product } from '@/lib/types';
+  ShieldCheck,
+} from "lucide-react";
+import { Product } from "@/lib/types";
 
 interface Message {
-  role: 'user' | 'assistant';
+  role: "user" | "assistant";
   content: string;
   recommendations?: any[];
   intent?: any;
@@ -29,15 +29,18 @@ interface Message {
 export default function ShopAssistantPage() {
   const [messages, setMessages] = useState<Message[]>([
     {
-      role: 'assistant',
-      content: "Hello! I am CommercePilot's AI Shopping Assistant for Velocity Sports. Tell me what sports gear you are looking for, your budget, or specific technical requirements (e.g. waterproof running shoes under ₹6,000) and I'll find and score the best matches in our catalog."
-    }
+      role: "assistant",
+      content:
+        "Hello! I am CommercePilot's AI Shopping Assistant for Velocity Sports. Tell me what sports gear you are looking for, your budget, or specific technical requirements (e.g. waterproof running shoes under ₹6,000) and I'll find and score the best matches in our catalog.",
+    },
   ]);
-  const [inputQuery, setInputQuery] = useState('');
+  const [inputQuery, setInputQuery] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [activeTab, setActiveTab] = useState<'recommendations' | 'raw_catalog'>('recommendations');
+  const [activeTab, setActiveTab] = useState<"recommendations" | "raw_catalog">(
+    "recommendations",
+  );
   const [displayedProducts, setDisplayedProducts] = useState<Product[]>([]);
-  const [rawCatalogJson, setRawCatalogJson] = useState<string>('');
+  const [rawCatalogJson, setRawCatalogJson] = useState<string>("");
   const [addingProductId, setAddingProductId] = useState<string | null>(null);
   const [addFeedback, setAddFeedback] = useState<string | null>(null);
 
@@ -48,7 +51,7 @@ export default function ShopAssistantPage() {
   useEffect(() => {
     const fetchCatalog = async () => {
       try {
-        const res = await fetch('/api/agent/catalog');
+        const res = await fetch("/api/agent/catalog");
         if (res.ok) {
           const data = await res.json();
           setDisplayedProducts(data.products || []);
@@ -62,49 +65,56 @@ export default function ShopAssistantPage() {
   }, []);
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
   const handleSendMessage = async (queryText?: string) => {
     const q = queryText || inputQuery;
     if (!q.trim() || isLoading) return;
 
-    setInputQuery('');
-    const userMsg: Message = { role: 'user', content: q };
-    setMessages(prev => [...prev, userMsg]);
+    setInputQuery("");
+    const userMsg: Message = { role: "user", content: q };
+    setMessages((prev) => [...prev, userMsg]);
     setIsLoading(true);
 
     try {
-      const res = await fetch('/api/agent/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: q })
+      const res = await fetch("/api/agent/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: q }),
       });
 
       if (res.ok) {
         const data = await res.json();
         const assistantMsg: Message = {
-          role: 'assistant',
+          role: "assistant",
           content: data.explanation,
           recommendations: data.recommendations,
-          intent: data.intent
+          intent: data.intent,
         };
-        setMessages(prev => [...prev, assistantMsg]);
+        setMessages((prev) => [...prev, assistantMsg]);
 
         // Update displayed products to ranked recommendations if present
         if (data.recommendations && data.recommendations.length > 0) {
           setDisplayedProducts(data.recommendations.map((r: any) => r.product));
         }
       } else {
-        setMessages(prev => [
-          ...prev, 
-          { role: 'assistant', content: "I encountered an error querying the catalog. Please try again." }
+        setMessages((prev) => [
+          ...prev,
+          {
+            role: "assistant",
+            content:
+              "I encountered an error querying the catalog. Please try again.",
+          },
         ]);
       }
     } catch (e) {
-      setMessages(prev => [
-        ...prev, 
-        { role: 'assistant', content: "Network timeout querying AI catalog agent." }
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: "assistant",
+          content: "Network timeout querying AI catalog agent.",
+        },
       ]);
     } finally {
       setIsLoading(false);
@@ -114,10 +124,10 @@ export default function ShopAssistantPage() {
   const handleAddToCart = async (product: Product) => {
     setAddingProductId(product.id);
     try {
-      const res = await fetch('/api/cart', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ productId: product.id, quantity: 1 })
+      const res = await fetch("/api/cart", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ productId: product.id, quantity: 1 }),
       });
 
       if (res.ok) {
@@ -125,7 +135,7 @@ export default function ShopAssistantPage() {
         setTimeout(() => setAddFeedback(null), 3000);
       }
     } catch (e) {
-      setAddFeedback('Failed to add to cart');
+      setAddFeedback("Failed to add to cart");
     } finally {
       setAddingProductId(null);
     }
@@ -135,12 +145,11 @@ export default function ShopAssistantPage() {
     "I need waterproof running shoes under ₹6,000",
     "Show me trail shoes for mountain hiking",
     "Running socks & hydration accessories under ₹1,000",
-    "Fitness tracker with heart rate & GPS"
+    "Fitness tracker with heart rate & GPS",
   ];
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
-      
       {/* Top Banner */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-border">
         <div>
@@ -154,29 +163,30 @@ export default function ShopAssistantPage() {
             </span>
           </div>
           <p className="text-xs text-text-muted mt-1">
-            Machine-readable catalog discoverable & transactable by AI agents with natural language semantic search.
+            Machine-readable catalog discoverable & transactable by AI agents
+            with natural language semantic search.
           </p>
         </div>
 
         {/* View Switcher */}
         <div className="flex items-center gap-2 bg-surface p-1 rounded-xl border border-border">
           <button
-            onClick={() => setActiveTab('recommendations')}
+            onClick={() => setActiveTab("recommendations")}
             className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all ${
-              activeTab === 'recommendations' 
-                ? 'bg-primary text-white shadow-sm' 
-                : 'text-text-muted hover:text-white'
+              activeTab === "recommendations"
+                ? "bg-primary text-white shadow-sm"
+                : "text-text-muted hover:text-white"
             }`}
           >
             <Layers className="w-3.5 h-3.5" />
             Product Cards
           </button>
           <button
-            onClick={() => setActiveTab('raw_catalog')}
+            onClick={() => setActiveTab("raw_catalog")}
             className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all ${
-              activeTab === 'raw_catalog' 
-                ? 'bg-primary text-white shadow-sm' 
-                : 'text-text-muted hover:text-white'
+              activeTab === "raw_catalog"
+                ? "bg-primary text-white shadow-sm"
+                : "text-text-muted hover:text-white"
             }`}
           >
             <Code2 className="w-3.5 h-3.5" />
@@ -192,7 +202,7 @@ export default function ShopAssistantPage() {
             {addFeedback} (Growth Agent will analyze cart for upsells)
           </span>
           <button
-            onClick={() => router.push('/cart')}
+            onClick={() => router.push("/cart")}
             className="px-3 py-1 rounded bg-emerald-500 text-white font-bold hover:bg-emerald-600 transition-colors"
           >
             Go to Cart →
@@ -202,10 +212,8 @@ export default function ShopAssistantPage() {
 
       {/* MAIN TWO-COLUMN LAYOUT */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        
         {/* LEFT COLUMN: CONVERSATIONAL AI SHOPPING CHAT (5 COLS) */}
         <div className="lg:col-span-5 rounded-2xl glass-panel border border-border flex flex-col h-[700px] overflow-hidden">
-          
           {/* Chat Header */}
           <div className="p-4 border-b border-border bg-surface flex items-center justify-between">
             <div className="flex items-center gap-2.5">
@@ -213,7 +221,9 @@ export default function ShopAssistantPage() {
                 <Bot className="w-4 h-4" />
               </div>
               <div>
-                <div className="text-xs font-bold text-white">Commerce Agent</div>
+                <div className="text-xs font-bold text-white">
+                  Commerce Agent
+                </div>
                 <div className="text-[10px] text-accent-emerald flex items-center gap-1">
                   <span className="w-1.5 h-1.5 rounded-full bg-accent-emerald animate-pulse" />
                   Semantic Catalog Connected
@@ -230,27 +240,32 @@ export default function ShopAssistantPage() {
             {messages.map((msg, index) => (
               <div
                 key={index}
-                className={`flex gap-2.5 ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                className={`flex gap-2.5 ${msg.role === "user" ? "justify-end" : "justify-start"}`}
               >
-                {msg.role === 'assistant' && (
+                {msg.role === "assistant" && (
                   <div className="w-7 h-7 rounded-lg bg-primary/20 border border-primary/30 flex items-center justify-center text-primary-light shrink-0 mt-0.5">
                     <Sparkles className="w-3.5 h-3.5" />
                   </div>
                 )}
-                
+
                 <div
                   className={`p-3.5 rounded-2xl text-xs leading-relaxed max-w-[85%] ${
-                    msg.role === 'user'
-                      ? 'bg-primary text-white rounded-tr-none'
-                      : 'bg-surface-elevated border border-border/80 text-text-secondary rounded-tl-none space-y-2'
+                    msg.role === "user"
+                      ? "bg-primary text-white rounded-tr-none"
+                      : "bg-surface-elevated border border-border/80 text-text-secondary rounded-tl-none space-y-2"
                   }`}
                 >
-                  <p className="whitespace-pre-line text-text-primary">{msg.content}</p>
+                  <p className="whitespace-pre-line text-text-primary">
+                    {msg.content}
+                  </p>
 
                   {/* Intent breakdown if assistant */}
                   {msg.intent && (
                     <div className="mt-2 pt-2 border-t border-border/60 text-[10px] font-mono text-text-muted">
-                      Parsed Intent: <span className="text-accent-cyan">{msg.intent.intentSummary}</span>
+                      Parsed Intent:{" "}
+                      <span className="text-accent-cyan">
+                        {msg.intent.intentSummary}
+                      </span>
                     </div>
                   )}
                 </div>
@@ -275,7 +290,7 @@ export default function ShopAssistantPage() {
                 onClick={() => handleSendMessage(p)}
                 className="px-2.5 py-1 rounded-lg bg-surface-elevated hover:bg-surface border border-border text-[10px] text-text-secondary hover:text-white whitespace-nowrap transition-colors"
               >
-                "{p}"
+                &quot;{p}&quot;
               </button>
             ))}
           </div>
@@ -305,13 +320,11 @@ export default function ShopAssistantPage() {
               </button>
             </form>
           </div>
-
         </div>
 
         {/* RIGHT COLUMN: PRODUCT RECOMMENDATIONS / RAW CATALOG (7 COLS) */}
         <div className="lg:col-span-7 space-y-4">
-          
-          {activeTab === 'raw_catalog' ? (
+          {activeTab === "raw_catalog" ? (
             /* RAW AI-READABLE JSON CATALOG */
             <div className="rounded-2xl glass-panel border border-border p-5 space-y-3">
               <div className="flex items-center justify-between pb-3 border-b border-border">
@@ -334,7 +347,9 @@ export default function ShopAssistantPage() {
             <div className="space-y-4">
               <div className="flex items-center justify-between text-xs text-text-muted">
                 <span>Displaying {displayedProducts.length} Ranked Items</span>
-                <span className="text-accent-cyan font-mono">Real-time Match Scoring Active</span>
+                <span className="text-accent-cyan font-mono">
+                  Real-time Match Scoring Active
+                </span>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -369,7 +384,7 @@ export default function ShopAssistantPage() {
                           {prod.name}
                         </h4>
                         <span className="text-sm font-bold text-white whitespace-nowrap">
-                          ₹{prod.price.toLocaleString('en-IN')}
+                          ₹{prod.price.toLocaleString("en-IN")}
                         </span>
                       </div>
 
@@ -380,7 +395,10 @@ export default function ShopAssistantPage() {
                       {/* Features */}
                       <div className="space-y-1 pt-1">
                         {prod.features.slice(0, 2).map((f, i) => (
-                          <div key={i} className="text-[10px] text-text-secondary flex items-center gap-1.5">
+                          <div
+                            key={i}
+                            className="text-[10px] text-text-secondary flex items-center gap-1.5"
+                          >
                             <CheckCircle2 className="w-3 h-3 text-emerald-400 shrink-0" />
                             <span className="truncate">{f}</span>
                           </div>
@@ -390,7 +408,8 @@ export default function ShopAssistantPage() {
                       {/* Why Recommended Explanation */}
                       {prod.whyRecommended && (
                         <div className="p-2 rounded-lg bg-primary/10 border border-primary/20 text-[10px] text-primary-light font-medium leading-tight">
-                          <span className="font-bold">AI Rationale:</span> {prod.whyRecommended}
+                          <span className="font-bold">AI Rationale:</span>{" "}
+                          {prod.whyRecommended}
                         </div>
                       )}
                     </div>
@@ -407,7 +426,8 @@ export default function ShopAssistantPage() {
                       >
                         {addingProductId === prod.id ? (
                           <>
-                            <Loader2 className="w-3 h-3 animate-spin" /> Adding...
+                            <Loader2 className="w-3 h-3 animate-spin" />{" "}
+                            Adding...
                           </>
                         ) : (
                           <>
@@ -416,17 +436,13 @@ export default function ShopAssistantPage() {
                         )}
                       </button>
                     </div>
-
                   </div>
                 ))}
               </div>
             </div>
           )}
-
         </div>
-
       </div>
-
     </div>
   );
 }
