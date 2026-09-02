@@ -1,0 +1,177 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Merchant {
+  id           String    @id @default(uuid())
+  name         String
+  slug         String    @unique
+  capabilities String    // JSON array of strings
+  policies     Policy[]
+  products     Product[]
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}
+
+model Product {
+  id           String      @id @default(uuid())
+  merchantId   String
+  merchant     Merchant    @relation(fields: [merchantId], references: [id], onDelete: Cascade)
+  name         String
+  slug         String      @unique
+  price        Float
+  currency     String      @default("INR")
+  category     String
+  description  String
+  features     String      // JSON array of strings
+  attributes   String      // JSON object e.g. {"waterproof": true, "usage": ["running"]}
+  image        String
+  stock        Int         @default(10)
+  tags         String      // JSON array of strings
+  cartItems    CartItem[]
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+}
+
+model Customer {
+  id                   String     @id @default(uuid())
+  name                 String
+  email                String     @unique
+  phone                String
+  messagesSentThisWeek Int        @default(0)
+  lastMessageAt        DateTime?
+  carts                Cart[]
+  orders               Order[]
+  campaigns            Campaign[]
+  createdAt            DateTime   @default(now())
+  updatedAt            DateTime   @updatedAt
+}
+
+model Cart {
+  id                 String               @id @default(uuid())
+  customerId         String
+  customer           Customer             @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  status             String               @default("ACTIVE") // ACTIVE, ABANDONED, RESTORED, CONVERTED
+  inactivityDuration Int                  @default(0) // minutes
+  productViews       Int                  @default(1)
+  timeSpentMinutes   Float                @default(2.0)
+  checkoutInitiated  Boolean              @default(false)
+  items              CartItem[]
+  orders             Order[]
+  campaigns          Campaign[]
+  opportunities      RevenueOpportunity[]
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
+}
+
+model CartItem {
+  id        String   @id @default(uuid())
+  cartId    String
+  cart      Cart     @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  quantity  Int      @default(1)
+  price     Float
+  createdAt DateTime @default(now())
+}
+
+model Order {
+  id              String    @id @default(uuid())
+  customerId      String
+  customer        Customer  @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  cartId          String?
+  cart            Cart?     @relation(fields: [cartId], references: [id])
+  razorpayOrderId String    @unique
+  amount          Float
+  currency        String    @default("INR")
+  status          String    @default("PENDING") // PENDING, PAID, FAILED
+  reasoning       String?
+  itemsSummary    String    // JSON string of item list
+  payments        Payment[]
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}
+
+model Payment {
+  id                String   @id @default(uuid())
+  orderId           String
+  order             Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  razorpayPaymentId String?
+  razorpaySignature String?
+  amount            Float
+  status            String   // SUCCESS, FAILED
+  failureReason     String?
+  createdAt         DateTime @default(now())
+}
+
+model Campaign {
+  id                   String   @id @default(uuid())
+  customerId           String
+  customer             Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  cartId               String
+  cart                 Cart     @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  channel              String   @default("WHATSAPP")
+  personalizedMessage  String
+  recommendedProductId String?
+  discountPercent      Float    @default(0)
+  deliveryStatus       String   @default("SENT") // SENT, DELIVERED, FAILED
+  deliveryError        String?
+  clicked              Boolean  @default(false)
+  createdAt            DateTime @default(now())
+}
+
+model AgentAction {
+  id           String   @id @default(uuid())
+  actionType   String   // RECOMMEND_PRODUCT, ADD_UPSELL, CREATE_CAMPAIGN, SEND_CAMPAIGN, CREATE_ORDER, INITIATE_PAYMENT, VERIFY_PAYMENT
+  agent        String   // COMMERCE_AGENT, GROWTH_AGENT, CAMPAIGN_AGENT, POLICY_ENGINE, ORCHESTRATOR
+  reason       String
+  confidence   Float
+  policyStatus String   // ALLOWED, BLOCKED, REQUIRES_APPROVAL
+  result       String   // SUCCESS, FAILED, PENDING
+  payload      String?  // JSON string
+  createdAt    DateTime @default(now())
+}
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  type      String   // EVENT, REASONING, POLICY, ACTION, SUCCESS, FAILURE
+  title     String
+  detail    String
+  agent     String?
+  payload   String?  // JSON string
+  timestamp DateTime @default(now())
+}
+
+model Policy {
+  id                     String   @id @default(uuid())
+  merchantId             String
+  merchant               Merchant @relation(fields: [merchantId], references: [id], onDelete: Cascade)
+  maxWhatsAppPerWeek     Int      @default(2)
+  minCartValue           Float    @default(500)
+  minInactivityMinutes   Int      @default(30)
+  maxDiscountPercent     Float    @default(10)
+  maxCampaignBudget      Float    @default(5000)
+  requirePaymentApproval Boolean  @default(true)
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+}
+
+model RevenueOpportunity {
+  id                String   @id @default(uuid())
+  cartId            String
+  cart              Cart     @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  customerName      String
+  cartValue         Float
+  customerIntent    String   // High, Medium, Low
+  intentScore       Int      @default(85)
+  urgency           String   // High, Medium, Normal
+  recommendedAction String
+  reasoning         String
+  status            String   @default("OPEN") // OPEN, EXECUTED, DISMISSED
+  createdAt         DateTime @default(now())
+}
