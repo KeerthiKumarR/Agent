@@ -22,6 +22,7 @@ export interface OrchestrationResult {
 export const agentOrchestrator = {
   /**
    * Executes the full 6-step autonomous recovery loop on an abandoned cart
+   * Persisting all state, decisions, audit logs, and actions to Supabase.
    */
   runRecoveryWorkflow: async (
     cartId: string,
@@ -74,6 +75,17 @@ export const agentOrchestrator = {
     });
     auditEntries.push(log1);
 
+    await db.logAgentAction({
+      actionId: `act_obs_${Date.now()}`,
+      agent: "ORCHESTRATOR",
+      action: "DETECT_ABANDONMENT",
+      reason: `Cart inactive for ${cart.inactivityDuration}m.`,
+      confidence: 1.0,
+      policyStatus: "ALLOWED",
+      result: "SUCCESS",
+      payload: observeStep.data,
+    });
+
     // ──────────────────────────────────────────
     // STEP 2: REASON
     // ──────────────────────────────────────────
@@ -106,6 +118,17 @@ export const agentOrchestrator = {
       payload: reasonStep.data,
     });
     auditEntries.push(log2);
+
+    await db.logAgentAction({
+      actionId: `act_rsn_${Date.now()}`,
+      agent: "GROWTH_AGENT",
+      action: "CALCULATE_INTENT",
+      reason: outreachDecision.reason,
+      confidence: outreachDecision.confidence,
+      policyStatus: "ALLOWED",
+      result: "SUCCESS",
+      payload: reasonStep.data,
+    });
 
     if (outreachDecision.decision !== "SEND_CAMPAIGN") {
       return {
@@ -143,6 +166,17 @@ export const agentOrchestrator = {
       payload: policyResult,
     });
     auditEntries.push(log3);
+
+    await db.logAgentAction({
+      actionId: `act_pol_${Date.now()}`,
+      agent: "POLICY_ENGINE",
+      action: "POLICY_CHECK",
+      reason: policyResult.reason,
+      confidence: 1.0,
+      policyStatus: policyResult.status,
+      result: policyResult.status === "ALLOWED" ? "SUCCESS" : "BLOCKED",
+      payload: policyResult,
+    });
 
     if (policyResult.status === "BLOCKED") {
       return {
@@ -194,6 +228,17 @@ export const agentOrchestrator = {
     });
     auditEntries.push(log4);
 
+    await db.logAgentAction({
+      actionId: `act_send_${Date.now()}`,
+      agent: "CAMPAIGN_AGENT",
+      action: "SEND_CAMPAIGN",
+      reason: `WhatsApp campaign sent to ${customer.phone}`,
+      confidence: 0.95,
+      policyStatus: "ALLOWED",
+      result: actStatus === "COMPLETED" ? "SUCCESS" : "FAILED",
+      payload: campaign,
+    });
+
     // ──────────────────────────────────────────
     // STEP 5: VERIFY
     // ──────────────────────────────────────────
@@ -239,6 +284,14 @@ export const agentOrchestrator = {
       timestamp: new Date().toISOString(),
     };
     steps.push(learnStep);
+
+    await db.addAuditLog({
+      type: "EVENT",
+      title: "Conversion Listener Initialized",
+      detail: `Agent learning loop active for cart ${cart.id}. Tracking recovery outcome.`,
+      agent: "ORCHESTRATOR",
+      payload: { cartId: cart.id },
+    });
 
     return {
       steps,

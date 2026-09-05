@@ -54,6 +54,52 @@ export default function CampaignComposerPage() {
   const [simulateFailure, setSimulateFailure] = useState(false);
   const [isSending, setIsSending] = useState(false);
   const [deliveryResult, setDeliveryResult] = useState<any>(null);
+  const [cartId, setCartId] = useState<string>("cart_abandoned_01");
+
+  useEffect(() => {
+    const initPage = async () => {
+      try {
+        const urlParams = new URLSearchParams(window.location.search);
+        const queryCartId = urlParams.get("cartId") || "cart_abandoned_01";
+        setCartId(queryCartId);
+
+        // Fetch recent campaigns and carts
+        const campRes = await fetch("/api/campaigns");
+        if (campRes.ok) {
+          const { campaigns } = await campRes.json();
+          const latestCamp = campaigns?.find(
+            (c: any) => c.cartId === queryCartId,
+          ) || campaigns?.[0];
+
+          if (latestCamp) {
+            setMessageCopy(latestCamp.message);
+            if (latestCamp.product) setProduct(latestCamp.product);
+            if (latestCamp.customerId) {
+              setCustomer({
+                id: latestCamp.customerId,
+                name: latestCamp.customerName,
+                email: "customer@example.com",
+                phone: latestCamp.customerPhone,
+                messagesSentThisWeek: 1,
+              });
+            }
+            if (latestCamp.deliveryStatus) {
+              setDeliveryResult({
+                success: latestCamp.deliveryStatus === "DELIVERED",
+                status: latestCamp.deliveryStatus,
+                messageId: latestCamp.id,
+                error: latestCamp.deliveryError,
+              });
+            }
+          }
+        }
+      } catch (e) {
+        console.error("Failed to load campaign data:", e);
+      }
+    };
+
+    initPage();
+  }, []);
 
   const handleDispatch = async () => {
     setIsSending(true);
@@ -64,7 +110,7 @@ export default function CampaignComposerPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          cartId: "cart_abandoned_01",
+          cartId,
           simulateFailure,
         }),
       });
@@ -102,11 +148,12 @@ export default function CampaignComposerPage() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         action: "SIMULATE_RESTORE_CART",
-        payload: { cartId: "cart_abandoned_01" },
+        payload: { cartId },
       }),
     });
-    router.push("/checkout?cartId=cart_abandoned_01&restored=true");
+    router.push(`/checkout?cartId=${cartId}&restored=true`);
   };
+
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">

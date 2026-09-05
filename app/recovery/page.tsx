@@ -42,107 +42,20 @@ export default function AbandonedCartRecoveryPage() {
       const res = await fetch("/api/merchant");
       if (res.ok) {
         const data = await res.json();
-        // Load initial carts
-        const cartRes = await fetch("/api/cart");
-        const activeData = await cartRes.json();
+        const dbCarts: Cart[] = (data.carts || []).filter(
+          (c: Cart) => c.status === "ABANDONED" || c.status === "ACTIVE",
+        );
 
-        // Build mock abandoned carts list from server
-        const demoCarts: Cart[] = [
-          {
-            id: "cart_abandoned_01",
-            customerId: "cust_demo_01",
-            customer: {
-              id: "cust_demo_01",
-              name: "Rohan Sharma",
-              email: "rohan.sharma@example.com",
-              phone: "+91 98765 43210",
-              messagesSentThisWeek: 1,
-            },
-            items: [
-              {
-                id: "citem_01",
-                productId: "shoe_001",
-                product: {
-                  id: "shoe_001",
-                  name: "AeroRun Waterproof Shoes",
-                  slug: "aerorun-waterproof",
-                  price: 4999,
-                  currency: "INR",
-                  category: "Running Shoes",
-                  description: "HydroShield waterproof membrane running shoes",
-                  features: ["100% Waterproof", "Nitrogen EVA Midsole"],
-                  attributes: {
-                    waterproof: true,
-                    usage: ["running", "outdoor"],
-                  },
-                  image:
-                    "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=400&q=80",
-                  stock: 18,
-                  tags: ["shoes", "running", "waterproof"],
-                },
-                quantity: 1,
-                price: 4999,
-              },
-            ],
-            status: "ABANDONED",
-            inactivityDuration: 120,
-            productViews: 4,
-            timeSpentMinutes: 7.5,
-            checkoutInitiated: true,
-            total: 4999,
-            createdAt: new Date(Date.now() - 3600000 * 2).toISOString(),
-            updatedAt: new Date(Date.now() - 3600000 * 2).toISOString(),
-          },
-          {
-            id: "cart_abandoned_02",
-            customerId: "cust_demo_02",
-            customer: {
-              id: "cust_demo_02",
-              name: "Priya Patel",
-              email: "priya.patel@example.com",
-              phone: "+91 98123 45678",
-              messagesSentThisWeek: 0,
-            },
-            items: [
-              {
-                id: "citem_02",
-                productId: "shoe_002",
-                product: {
-                  id: "shoe_002",
-                  name: "AeroRun Trail Pro",
-                  slug: "aerorun-trail-pro",
-                  price: 5799,
-                  currency: "INR",
-                  category: "Trail Shoes",
-                  description: "Rugged high-performance trail running shoes",
-                  features: ["5mm Aggressive Lugs", "Carbon Rock Plate"],
-                  attributes: { waterproof: true, usage: ["trail", "hiking"] },
-                  image:
-                    "https://images.unsplash.com/photo-1551107696-a4b0c5a0d9a2?auto=format&fit=crop&w=400&q=80",
-                  stock: 12,
-                  tags: ["shoes", "trail", "waterproof"],
-                },
-                quantity: 1,
-                price: 5799,
-              },
-            ],
-            status: "ABANDONED",
-            inactivityDuration: 45,
-            productViews: 5,
-            timeSpentMinutes: 11.2,
-            checkoutInitiated: true,
-            total: 5799,
-            createdAt: new Date(Date.now() - 60000 * 45).toISOString(),
-            updatedAt: new Date(Date.now() - 60000 * 45).toISOString(),
-          },
-        ];
-        setCarts(demoCarts);
-        setSelectedCart(demoCarts[0]);
+        if (dbCarts.length > 0) {
+          setCarts(dbCarts);
+          setSelectedCart(dbCarts[0]);
+        }
       }
     } catch (e) {
       console.error(e);
     }
   };
+
 
   useEffect(() => {
     fetchAbandonedCarts();

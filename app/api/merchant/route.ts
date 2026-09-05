@@ -23,6 +23,7 @@ export async function GET() {
 
     return NextResponse.json({
       merchant,
+      carts,
       metrics: {
         totalRevenue,
         recoveredRevenue,
@@ -35,6 +36,7 @@ export async function GET() {
       recentActivity: auditLogs.slice(0, 15),
       campaigns,
     });
+
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
