@@ -70,7 +70,7 @@ export default function LandingPage() {
 
           {/* Subheadline */}
           <p className="text-base sm:text-lg text-zinc-400 max-w-2xl mx-auto leading-relaxed">
-            CommercePilot deploys autonomous agents to observe cart telemetry, calculate purchase intent, enforce merchant policies, and recover lost sales with strict auditability.
+            Commerce Agent deploys autonomous agents to observe cart telemetry, calculate purchase intent, enforce merchant policies, and recover lost sales with strict auditability.
           </p>
 
           {/* Action Buttons */}

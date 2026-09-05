@@ -80,7 +80,7 @@ export default function AgentThinking({
   currentStepIndex = 5,
   steps = DEFAULT_STEPS,
   isThinking = false,
-  agentName = "CommercePilot Orchestrator",
+  agentName = "Commerce Agent Orchestrator",
 }: AgentThinkingProps) {
   const getStepIcon = (
     step: WorkflowStepData["step"],

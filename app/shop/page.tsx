@@ -27,7 +27,7 @@ export default function ShopAssistantPage() {
     {
       role: "assistant",
       content:
-        "Hello! I am CommercePilot's AI Assistant for Velocity Sports. Tell me what sports gear you are looking for, your budget, or specific technical requirements (e.g. waterproof running shoes under ₹6,000) and I'll find and score the best matches.",
+        "Hello! I am Commerce Agent's AI Assistant for Velocity Sports. Tell me what sports gear you are looking for, your budget, or specific technical requirements (e.g. waterproof running shoes under ₹6,000) and I'll find and score the best matches.",
     },
   ]);
   const [inputQuery, setInputQuery] = useState("");

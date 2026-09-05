@@ -207,7 +207,7 @@ export const commerceAgent = {
     const best = topMatches[0];
 
     // Attempt real LLM generation
-    const systemPrompt = `You are CommercePilot AI Assistant for Velocity Sports. You help customers discover sports gear based on machine-readable catalog attributes. Respond concisely, enthusiastically, and explain why the top recommended product matches their exact criteria (budget, waterproofing, use-case). Mention price in INR (₹). Keep to 2-3 sentences.`;
+    const systemPrompt = `You are Commerce Agent AI Assistant for Velocity Sports. You help customers discover sports gear based on machine-readable catalog attributes. Respond concisely, enthusiastically, and explain why the top recommended product matches their exact criteria (budget, waterproofing, use-case). Mention price in INR (₹). Keep to 2-3 sentences.`;
 
     const userPrompt = `User request: "${intent.rawQuery}". Top match: "${best.product.name}" at ₹${best.product.price} (Match score: ${best.matchScore}%). Key features: ${best.product.features.join(", ")}. Attributes: ${JSON.stringify(best.product.attributes)}.`;
 

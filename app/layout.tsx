@@ -4,7 +4,7 @@ import Navbar from "@/components/Navbar";
 import DemoControlsModal from "@/components/DemoControlsModal";
 
 export const metadata: Metadata = {
-  title: "CommercePilot — Autonomous AI Growth & Agentic Commerce Platform",
+  title: "Commerce Agent — Autonomous AI Growth & Agentic Commerce Platform",
   description:
     "Turn Every Customer Signal Into Revenue. Autonomous growth agents, AI-readable catalogs, bounded policy engines, and explainable payments for merchants.",
 };

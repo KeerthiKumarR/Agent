@@ -76,7 +76,7 @@ export default function Navbar({ onOpenDemoControls }: NavbarProps) {
             </svg>
           </div>
           <span className="font-semibold text-sm tracking-tight text-white group-hover:text-zinc-200 transition-colors">
-            CommercePilot
+            Commerce Agent
           </span>
         </Link>
 
