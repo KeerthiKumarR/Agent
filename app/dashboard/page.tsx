@@ -28,23 +28,6 @@ import {
 import AuditBadge from "@/components/AuditBadge";
 import { RevenueOpportunity, AuditLogEntry, MerchantPolicy } from "@/lib/types";
 
-const REVENUE_DATA = [
-  { month: "Apr", total: 145000, recovered: 12000, upsell: 5000 },
-  { month: "May", total: 172000, recovered: 18500, upsell: 8200 },
-  { month: "Jun", total: 198000, recovered: 24000, upsell: 11000 },
-  { month: "Jul", total: 220000, recovered: 29000, upsell: 12800 },
-  { month: "Aug", total: 236000, recovered: 31500, upsell: 13900 },
-  { month: "Sep", total: 248500, recovered: 34200, upsell: 14800 },
-];
-
-const CAMPAIGN_FUNNEL = [
-  { stage: "Carts Abandoned", count: 125, fill: "#e4e4e7" },
-  { stage: "Policy Approved", count: 112, fill: "#a1a1aa" },
-  { stage: "Campaigns Sent", count: 112, fill: "#71717a" },
-  { stage: "Customers Returned", count: 48, fill: "#10b981" },
-  { stage: "Orders Completed", count: 23, fill: "#ffffff" },
-];
-
 export default function MerchantDashboard() {
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -253,57 +236,69 @@ export default function MerchantDashboard() {
             </div>
           </div>
 
-          <div className="h-60 w-full">
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart
-                data={REVENUE_DATA}
-                margin={{ top: 10, right: 10, left: 0, bottom: 0 }}
-              >
-                <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
-                <XAxis
-                  dataKey="month"
-                  stroke="#71717a"
-                  fontSize={11}
-                  tickLine={false}
-                />
-                <YAxis
-                  stroke="#71717a"
-                  fontSize={11}
-                  tickLine={false}
-                  tickFormatter={(v) => `₹${v / 1000}k`}
-                />
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: "#18181b",
-                    borderColor: "#27272a",
-                    borderRadius: "6px",
-                    color: "#fafafa",
-                    fontSize: "12px",
-                  }}
-                  formatter={(value: any) => [
-                    `₹${Number(value).toLocaleString("en-IN")}`,
-                    "",
+          {metrics.totalRevenue === 0 && metrics.recoveredRevenue === 0 ? (
+            <div className="h-60 w-full flex flex-col items-center justify-center text-center p-6 rounded-lg bg-[#18181b]/40 border border-dashed border-[#27272a]">
+              <RotateCcw className="w-6 h-6 text-zinc-600 mb-2" />
+              <span className="text-xs font-medium text-zinc-300">No revenue records yet</span>
+              <span className="text-[11px] text-zinc-500 max-w-xs mt-1">
+                Completed checkouts and recovered carts will automatically populate this revenue trajectory chart.
+              </span>
+            </div>
+          ) : (
+            <div className="h-60 w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart
+                  data={[
+                    { month: "Current", total: metrics.totalRevenue, recovered: metrics.recoveredRevenue, upsell: metrics.upsellRevenue }
                   ]}
-                />
-                <Area
-                  type="monotone"
-                  dataKey="total"
-                  stroke="#ffffff"
-                  strokeWidth={1.5}
-                  fill="#ffffff"
-                  fillOpacity={0.05}
-                />
-                <Area
-                  type="monotone"
-                  dataKey="recovered"
-                  stroke="#10b981"
-                  strokeWidth={1.5}
-                  fill="#10b981"
-                  fillOpacity={0.1}
-                />
-              </AreaChart>
-            </ResponsiveContainer>
-          </div>
+                  margin={{ top: 10, right: 10, left: 0, bottom: 0 }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
+                  <XAxis
+                    dataKey="month"
+                    stroke="#71717a"
+                    fontSize={11}
+                    tickLine={false}
+                  />
+                  <YAxis
+                    stroke="#71717a"
+                    fontSize={11}
+                    tickLine={false}
+                    tickFormatter={(v) => `₹${v}`}
+                  />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: "#18181b",
+                      borderColor: "#27272a",
+                      borderRadius: "6px",
+                      color: "#fafafa",
+                      fontSize: "12px",
+                    }}
+                    formatter={(value: any) => [
+                      `₹${Number(value).toLocaleString("en-IN")}`,
+                      "",
+                    ]}
+                  />
+                  <Area
+                    type="monotone"
+                    dataKey="total"
+                    stroke="#ffffff"
+                    strokeWidth={1.5}
+                    fill="#ffffff"
+                    fillOpacity={0.05}
+                  />
+                  <Area
+                    type="monotone"
+                    dataKey="recovered"
+                    stroke="#10b981"
+                    strokeWidth={1.5}
+                    fill="#10b981"
+                    fillOpacity={0.1}
+                  />
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
+          )}
         </div>
 
         {/* Campaign Funnel Chart */}
@@ -317,46 +312,63 @@ export default function MerchantDashboard() {
             </p>
           </div>
 
-          <div className="h-60 w-full">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart
-                data={CAMPAIGN_FUNNEL}
-                layout="vertical"
-                margin={{ top: 5, right: 10, left: 10, bottom: 5 }}
-              >
-                <CartesianGrid
-                  strokeDasharray="3 3"
-                  stroke="#27272a"
-                  horizontal={false}
-                />
-                <XAxis
-                  type="number"
-                  stroke="#71717a"
-                  fontSize={10}
-                  tickLine={false}
-                />
-                <YAxis
-                  type="category"
-                  dataKey="stage"
-                  stroke="#a1a1aa"
-                  fontSize={10}
-                  tickLine={false}
-                  width={95}
-                />
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: "#18181b",
-                    borderColor: "#27272a",
-                    borderRadius: "6px",
-                    color: "#fafafa",
-                    fontSize: "12px",
-                  }}
-                  formatter={(value: any) => [value, "Carts"]}
-                />
-                <Bar dataKey="count" radius={[0, 3, 3, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
+          {metrics.abandonedCartsCount === 0 && (data?.campaigns?.length || 0) === 0 ? (
+            <div className="h-60 w-full flex flex-col items-center justify-center text-center p-6 rounded-lg bg-[#18181b]/40 border border-dashed border-[#27272a]">
+              <Sparkles className="w-6 h-6 text-zinc-600 mb-2" />
+              <span className="text-xs font-medium text-zinc-300">No active recovery funnel</span>
+              <span className="text-[11px] text-zinc-500 max-w-xs mt-1">
+                Abandon a cart in the AI Shop or trigger a scenario to view real-time conversion stages.
+              </span>
+            </div>
+          ) : (
+            <div className="h-60 w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart
+                  data={[
+                    { stage: "Abandoned", count: metrics.abandonedCartsCount, fill: "#e4e4e7" },
+                    { stage: "Approved", count: data?.campaigns?.length || 0, fill: "#a1a1aa" },
+                    { stage: "Sent", count: data?.campaigns?.filter((c: any) => c.status === "SENT").length || 0, fill: "#71717a" },
+                    { stage: "Returned", count: data?.carts?.filter((c: any) => c.status === "RESTORED" || c.status === "CONVERTED").length || 0, fill: "#10b981" },
+                    { stage: "Orders", count: data?.carts?.filter((c: any) => c.status === "CONVERTED").length || 0, fill: "#ffffff" },
+                  ]}
+                  layout="vertical"
+                  margin={{ top: 5, right: 10, left: 10, bottom: 5 }}
+                >
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    stroke="#27272a"
+                    horizontal={false}
+                  />
+                  <XAxis
+                    type="number"
+                    stroke="#71717a"
+                    fontSize={10}
+                    tickLine={false}
+                    allowDecimals={false}
+                  />
+                  <YAxis
+                    type="category"
+                    dataKey="stage"
+                    stroke="#a1a1aa"
+                    fontSize={10}
+                    tickLine={false}
+                    width={80}
+                  />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: "#18181b",
+                      borderColor: "#27272a",
+                      borderRadius: "6px",
+                      color: "#fafafa",
+                      fontSize: "12px",
+                    }}
+                    formatter={(value: any) => [value, "Carts"]}
+                  />
+                  <Bar dataKey="count" radius={[0, 3, 3, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          )}
         </div>
       </div>
 
