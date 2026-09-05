@@ -2,28 +2,20 @@
 
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
   RotateCcw,
   Brain,
-  ShieldCheck,
   Send,
-  CheckCircle2,
-  XCircle,
-  AlertCircle,
-  Clock,
   Eye,
-  TrendingUp,
   Loader2,
-  Zap,
-  ArrowRight,
-  Sliders,
   Sparkles,
+  ArrowRight,
 } from "lucide-react";
 import AgentThinking, { WorkflowStepData } from "@/components/AgentThinking";
 import { Cart } from "@/lib/types";
 import { OrchestrationResult } from "@/lib/agents/agentOrchestrator";
+import { calculateIntentScore } from "@/lib/agents/intentScore";
 
 export default function AbandonedCartRecoveryPage() {
   const [carts, setCarts] = useState<Cart[]>([]);
@@ -56,7 +48,6 @@ export default function AbandonedCartRecoveryPage() {
     }
   };
 
-
   useEffect(() => {
     fetchAbandonedCarts();
   }, []);
@@ -78,7 +69,6 @@ export default function AbandonedCartRecoveryPage() {
         const data: OrchestrationResult = await res.json();
         setAnalysisResult(data);
 
-        // Map backend orchestration steps to visual component steps
         const mappedSteps: WorkflowStepData[] = data.steps.map((s, idx) => ({
           step: s.step,
           status: s.status,
@@ -101,36 +91,35 @@ export default function AbandonedCartRecoveryPage() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-border">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#27272a]">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-2xl font-bold text-white tracking-tight flex items-center gap-2">
-              <RotateCcw className="w-6 h-6 text-accent-cyan" />
+            <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight flex items-center gap-2">
+              <RotateCcw className="w-5 h-5 text-zinc-300" />
               Abandoned Cart Recovery Center
             </h1>
-            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-accent-cyan/20 text-accent-cyan border border-accent-cyan/30 font-bold uppercase">
-              Autonomous Campaign Orchestrator
+            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-zinc-800 text-zinc-300 border border-zinc-700 font-semibold uppercase">
+              Autonomous Lifecycle
             </span>
           </div>
-          <p className="text-xs text-text-muted mt-1">
-            Observe → Reason → Policy Check → Act → Verify → Learn. The agent
-            calculates intent and checks merchant boundaries before intervening.
+          <p className="text-xs text-zinc-400 mt-1">
+            Observe → Reason → Policy Check → Act → Verify → Learn. Intent analysis with strict policy boundaries.
           </p>
         </div>
 
         <button
           onClick={() => selectedCart && handleAnalyzeCart(selectedCart)}
           disabled={isAnalyzing || !selectedCart}
-          className="px-4 py-2 rounded-xl bg-gradient-to-r from-primary to-accent-cyan hover:opacity-95 text-white text-xs font-bold transition-all shadow-md shadow-primary/20 flex items-center gap-2 disabled:opacity-50"
+          className="px-4 py-2 rounded-lg bg-white hover:bg-zinc-200 text-black text-xs font-semibold transition-colors flex items-center gap-2 disabled:opacity-40"
         >
           {isAnalyzing ? (
             <>
-              <Loader2 className="w-4 h-4 animate-spin" />
+              <Loader2 className="w-3.5 h-3.5 animate-spin" />
               <span>Analyzing Signals...</span>
             </>
           ) : (
             <>
-              <Sparkles className="w-4 h-4" />
+              <Sparkles className="w-3.5 h-3.5" />
               <span>Run Agent Analysis Loop</span>
             </>
           )}
@@ -138,36 +127,36 @@ export default function AbandonedCartRecoveryPage() {
       </div>
 
       {/* TWO-COLUMN WORKSPACE */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* LEFT COLUMN: ABANDONED CARTS QUEUE (5 COLS) */}
-        <div className="lg:col-span-5 space-y-4">
-          <div className="flex items-center justify-between text-xs text-text-muted">
-            <span className="font-mono font-bold uppercase">
-              Active Abandoned Carts ({carts.length})
+        <div className="lg:col-span-5 space-y-3">
+          <div className="flex items-center justify-between text-xs text-zinc-400">
+            <span className="font-mono uppercase font-semibold">
+              Abandoned Carts ({carts.length})
             </span>
-            <span>Click to inspect</span>
+            <span className="text-zinc-500">Select to inspect</span>
           </div>
 
-          <div className="space-y-3">
+          <div className="space-y-2.5">
             {carts.map((cart) => {
               const item = cart.items[0];
               const isSelected = selectedCart?.id === cart.id;
-              const intentScore = cart.id === "cart_abandoned_01" ? 87 : 92;
+              const intent = calculateIntentScore(cart);
 
               return (
                 <div
                   key={cart.id}
                   onClick={() => setSelectedCart(cart)}
-                  className={`p-4 rounded-2xl border cursor-pointer transition-all duration-200 space-y-3 ${
+                  className={`p-3.5 rounded-xl border cursor-pointer transition-colors space-y-3 ${
                     isSelected
-                      ? "bg-surface-elevated border-primary shadow-lg shadow-primary/10 ring-1 ring-primary/40"
-                      : "bg-surface/80 border-border hover:border-border/80"
+                      ? "bg-[#18181b] border-zinc-500 shadow-sm"
+                      : "bg-[#121214] border-[#27272a] hover:border-zinc-600"
                   }`}
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex items-center gap-3">
-                      <div className="relative w-14 h-14 rounded-xl overflow-hidden bg-surface shrink-0 border border-border">
-                        {item?.product.image && (
+                      <div className="relative w-12 h-12 rounded-lg overflow-hidden bg-[#18181b] shrink-0 border border-[#27272a]">
+                        {item?.product?.image && (
                           <Image
                             src={item.product.image}
                             alt={item.product.name}
@@ -177,32 +166,31 @@ export default function AbandonedCartRecoveryPage() {
                         )}
                       </div>
                       <div>
-                        <h4 className="text-xs font-bold text-white truncate max-w-[180px]">
-                          {cart.customer?.name}
+                        <h4 className="text-xs font-semibold text-white truncate max-w-[170px]">
+                          {cart.customer?.name || "Customer"}
                         </h4>
-                        <div className="text-[11px] text-text-muted truncate max-w-[180px]">
-                          {item?.product.name}
+                        <div className="text-[11px] text-zinc-400 truncate max-w-[170px]">
+                          {item?.product?.name || "Sports Gear"}
                         </div>
-                        <div className="text-xs font-bold text-accent-cyan mt-0.5">
+                        <div className="text-xs font-semibold text-white mt-0.5">
                           ₹{cart.total.toLocaleString("en-IN")}
                         </div>
                       </div>
                     </div>
 
                     <div className="text-right space-y-1">
-                      <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/30 font-bold block">
+                      <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-300 border border-zinc-700 block">
                         {cart.inactivityDuration}m Inactive
                       </span>
-                      <span className="text-[11px] font-bold text-emerald-400 block">
-                        Intent: {intentScore}%
+                      <span className="text-[11px] font-semibold text-emerald-400 block">
+                        Intent: {intent.score}%
                       </span>
                     </div>
                   </div>
 
-                  <div className="pt-2 border-t border-border/60 flex items-center justify-between">
-                    <span className="text-[10px] text-text-muted">
-                      Views: {cart.productViews} • Dwell:{" "}
-                      {cart.timeSpentMinutes}m
+                  <div className="pt-2 border-t border-[#27272a] flex items-center justify-between">
+                    <span className="text-[10px] text-zinc-500">
+                      Views: {cart.productViews} • Dwell: {cart.timeSpentMinutes}m
                     </span>
                     <button
                       onClick={(e) => {
@@ -210,9 +198,9 @@ export default function AbandonedCartRecoveryPage() {
                         handleAnalyzeCart(cart);
                       }}
                       disabled={isAnalyzing}
-                      className="px-3 py-1 rounded-lg bg-primary/20 hover:bg-primary text-primary-light hover:text-white text-xs font-semibold flex items-center gap-1 transition-all border border-primary/30"
+                      className="px-2.5 py-1 rounded bg-[#18181b] hover:bg-zinc-700 text-zinc-200 hover:text-white text-xs font-medium flex items-center gap-1 border border-zinc-700 transition-colors"
                     >
-                      <Brain className="w-3.5 h-3.5" />
+                      <Brain className="w-3 h-3" />
                       <span>Ask Agent to Analyze</span>
                     </button>
                   </div>
@@ -223,78 +211,91 @@ export default function AbandonedCartRecoveryPage() {
         </div>
 
         {/* RIGHT COLUMN: DETAILED 6-STEP AGENT REASONING WORKSPACE (7 COLS) */}
-        <div className="lg:col-span-7 space-y-6">
+        <div className="lg:col-span-7 space-y-5">
           {selectedCart && (
             <>
               {/* Telemetry Summary Card */}
-              <div className="p-5 rounded-2xl glass-panel border border-border space-y-4">
-                <div className="flex items-center justify-between pb-3 border-b border-border">
-                  <div className="flex items-center gap-2">
-                    <Eye className="w-4 h-4 text-blue-400" />
-                    <h3 className="text-xs font-bold text-white uppercase tracking-wider">
-                      Live Telemetry & Intent Factors
-                    </h3>
-                  </div>
-                  <span className="text-xs font-mono text-text-muted">
-                    Target: {selectedCart.customer?.name} (
-                    {selectedCart.customer?.phone})
-                  </span>
-                </div>
-
-                {/* 5 Transparent Scoring Factors */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
-                  <div className="p-2.5 rounded-lg bg-surface border border-border flex items-center justify-between">
-                    <span className="text-text-secondary">
-                      ✓ Product Views ({selectedCart.productViews}x):
-                    </span>
-                    <span className="font-bold text-emerald-400">+30 pts</span>
-                  </div>
-                  <div className="p-2.5 rounded-lg bg-surface border border-border flex items-center justify-between">
-                    <span className="text-text-secondary">
-                      ✓ Added to Cart:
-                    </span>
-                    <span className="font-bold text-emerald-400">+25 pts</span>
-                  </div>
-                  <div className="p-2.5 rounded-lg bg-surface border border-border flex items-center justify-between">
-                    <span className="text-text-secondary">
-                      ✓ Checkout Reached:
-                    </span>
-                    <span className="font-bold text-emerald-400">+20 pts</span>
-                  </div>
-                  <div className="p-2.5 rounded-lg bg-surface border border-border flex items-center justify-between">
-                    <span className="text-text-secondary">
-                      ✓ Cart Value (&gt; ₹4k):
-                    </span>
-                    <span className="font-bold text-emerald-400">+10 pts</span>
-                  </div>
-                  <div className="p-2.5 rounded-lg bg-surface border border-border flex items-center justify-between sm:col-span-2">
-                    <span className="text-text-secondary">
-                      ✓ Recent Activity ({selectedCart.inactivityDuration}m
-                      window):
-                    </span>
-                    <span className="font-bold text-emerald-400">+2 pts</span>
-                  </div>
-                </div>
-
-                {/* Intent Score Bar */}
-                <div className="p-3.5 rounded-xl bg-surface-elevated border border-primary/30 flex items-center justify-between">
-                  <div>
-                    <div className="text-xs font-bold text-white">
-                      Calculated Intent Score:
+              {(() => {
+                const selectedIntent = calculateIntentScore(selectedCart);
+                return (
+                  <div className="p-4 rounded-xl bg-[#121214] border border-[#27272a] space-y-3.5">
+                    <div className="flex items-center justify-between pb-2.5 border-b border-[#27272a]">
+                      <div className="flex items-center gap-2">
+                        <Eye className="w-4 h-4 text-zinc-300" />
+                        <h3 className="text-xs font-semibold text-white uppercase tracking-wider">
+                          Telemetry & Intent Factors
+                        </h3>
+                      </div>
+                      <span className="text-xs font-mono text-zinc-400">
+                        Target: {selectedCart.customer?.name || "Customer"} ({selectedCart.customer?.phone || ""})
+                      </span>
                     </div>
-                    <div className="text-[11px] text-text-muted">
-                      High probability of recovery via non-aggressive message.
+
+                    {/* 5 Transparent Scoring Factors */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                      <div className="p-2 rounded bg-[#18181b] border border-[#27272a] flex items-center justify-between">
+                        <span className="text-zinc-400">
+                          Product Views ({selectedCart.productViews}x):
+                        </span>
+                        <span className="font-semibold text-emerald-400">
+                          +{selectedIntent.factors.productViews.points} pts
+                        </span>
+                      </div>
+                      <div className="p-2 rounded bg-[#18181b] border border-[#27272a] flex items-center justify-between">
+                        <span className="text-zinc-400">
+                          Added to Cart:
+                        </span>
+                        <span className="font-semibold text-emerald-400">
+                          +{selectedIntent.factors.addedToCart.points} pts
+                        </span>
+                      </div>
+                      <div className="p-2 rounded bg-[#18181b] border border-[#27272a] flex items-center justify-between">
+                        <span className="text-zinc-400">
+                          Checkout Reached:
+                        </span>
+                        <span className="font-semibold text-emerald-400">
+                          +{selectedIntent.factors.checkoutInitiated.points} pts
+                        </span>
+                      </div>
+                      <div className="p-2 rounded bg-[#18181b] border border-[#27272a] flex items-center justify-between">
+                        <span className="text-zinc-400">
+                          Cart Value:
+                        </span>
+                        <span className="font-semibold text-emerald-400">
+                          +{selectedIntent.factors.highValueCart.points} pts
+                        </span>
+                      </div>
+                      <div className="p-2 rounded bg-[#18181b] border border-[#27272a] flex items-center justify-between sm:col-span-2">
+                        <span className="text-zinc-400">
+                          Inactivity Window ({selectedCart.inactivityDuration}m):
+                        </span>
+                        <span className="font-semibold text-emerald-400">
+                          +{selectedIntent.factors.recentActivity.points} pts
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Intent Score Bar */}
+                    <div className="p-3 rounded-lg bg-[#18181b] border border-[#27272a] flex items-center justify-between">
+                      <div>
+                        <div className="text-xs font-semibold text-white">
+                          Calculated Intent Score:
+                        </div>
+                        <div className="text-[11px] text-zinc-400">
+                          {selectedIntent.summary}
+                        </div>
+                      </div>
+                      <div className="text-xl font-bold text-emerald-400 font-mono">
+                        {selectedIntent.score} <span className="text-xs text-zinc-500">/ 100</span>
+                      </div>
                     </div>
                   </div>
-                  <div className="text-2xl font-extrabold text-accent-cyan font-mono">
-                    87 <span className="text-xs text-text-muted">/ 100</span>
-                  </div>
-                </div>
-              </div>
+                );
+              })()}
 
               {/* 6-STEP AGENT WORKFLOW VISUALIZER */}
-              <div className="space-y-3">
-                <div className="text-xs font-mono text-text-muted uppercase font-bold tracking-wider">
+              <div className="space-y-2.5">
+                <div className="text-xs font-mono text-zinc-400 uppercase font-semibold">
                   Autonomous Agent Workflow Execution
                 </div>
                 <AgentThinking
@@ -306,21 +307,20 @@ export default function AbandonedCartRecoveryPage() {
               </div>
 
               {/* Action Banner to View Generated Campaign */}
-              <div className="p-4 rounded-xl bg-gradient-to-r from-primary/20 via-accent-purple/20 to-accent-cyan/20 border border-primary/40 flex items-center justify-between gap-4 animate-in fade-in">
+              <div className="p-3.5 rounded-xl bg-[#121214] border border-[#27272a] flex items-center justify-between gap-3">
                 <div className="space-y-0.5">
-                  <div className="text-xs font-bold text-white flex items-center gap-1.5">
-                    <Send className="w-3.5 h-3.5 text-accent-cyan" />
-                    Personalized WhatsApp Campaign Generated
+                  <div className="text-xs font-semibold text-white flex items-center gap-1.5">
+                    <Send className="w-3.5 h-3.5 text-zinc-300" />
+                    Personalized Recovery Campaign Generated
                   </div>
-                  <div className="text-[11px] text-text-secondary">
-                    Review non-aggressive message copy, phone mockup, and
-                    interactive restoration CTA.
+                  <div className="text-[11px] text-zinc-400">
+                    Review non-aggressive message copy, simulator, and restoration CTA.
                   </div>
                 </div>
 
                 <button
-                  onClick={() => router.push("/campaigns")}
-                  className="px-4 py-2 rounded-xl bg-primary hover:bg-primary-hover text-white text-xs font-bold transition-all shadow-md flex items-center gap-1 whitespace-nowrap"
+                  onClick={() => router.push(`/campaigns?cartId=${selectedCart.id}`)}
+                  className="px-3.5 py-1.5 rounded-lg bg-white hover:bg-zinc-200 text-black text-xs font-semibold transition-colors flex items-center gap-1 whitespace-nowrap"
                 >
                   <span>Open Campaign Composer</span>
                   <ArrowRight className="w-3.5 h-3.5" />

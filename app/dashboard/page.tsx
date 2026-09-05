@@ -10,14 +10,9 @@ import {
   TrendingUp,
   Zap,
   ShieldCheck,
-  ArrowUpRight,
   Eye,
   Sparkles,
-  Clock,
   X,
-  CheckCircle2,
-  AlertCircle,
-  Sliders,
 } from "lucide-react";
 import {
   AreaChart,
@@ -43,11 +38,11 @@ const REVENUE_DATA = [
 ];
 
 const CAMPAIGN_FUNNEL = [
-  { stage: "Carts Abandoned", count: 125, fill: "#6366F1" },
-  { stage: "Policy Approved", count: 112, fill: "#818CF8" },
-  { stage: "Campaigns Sent", count: 112, fill: "#06B6D4" },
-  { stage: "Customers Returned", count: 48, fill: "#10B981" },
-  { stage: "Orders Completed", count: 23, fill: "#A855F7" },
+  { stage: "Carts Abandoned", count: 125, fill: "#e4e4e7" },
+  { stage: "Policy Approved", count: 112, fill: "#a1a1aa" },
+  { stage: "Campaigns Sent", count: 112, fill: "#71717a" },
+  { stage: "Customers Returned", count: 48, fill: "#10b981" },
+  { stage: "Orders Completed", count: 23, fill: "#ffffff" },
 ];
 
 export default function MerchantDashboard() {
@@ -91,10 +86,10 @@ export default function MerchantDashboard() {
         body: JSON.stringify({ policies: updated }),
       });
       if (res.ok) {
-        setPolicyFeedback("Policy updated & verified by Policy Engine");
+        setPolicyFeedback("Policy updated & verified");
         setTimeout(() => setPolicyFeedback(null), 3000);
       }
-    } catch (e) {
+    } catch {
       setPolicyFeedback("Failed to update policy");
     } finally {
       setSavingPolicy(false);
@@ -116,46 +111,45 @@ export default function MerchantDashboard() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-border">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-[#27272a]">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
+            <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
               Merchant Revenue Dashboard
             </h1>
-            <span className="text-xs font-mono font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+            <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-zinc-800 text-zinc-300 border border-zinc-700">
               Velocity Sports
             </span>
           </div>
-          <p className="text-sm text-text-secondary mt-1">
-            Real-time autonomous commerce analytics, agent intervention feed,
-            and bounded safety policies.
+          <p className="text-xs text-zinc-400 mt-1">
+            Real-time autonomous commerce analytics, agent interventions, and safety policies.
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
           <Link
             href="/recovery"
-            className="px-4 py-2 rounded-lg bg-primary hover:bg-primary-hover text-white text-xs font-bold transition-all shadow-md shadow-primary/20 flex items-center gap-1.5"
+            className="px-3.5 py-2 rounded-lg bg-white hover:bg-zinc-200 text-black text-xs font-semibold transition-colors flex items-center gap-1.5"
           >
             <RotateCcw className="w-3.5 h-3.5" />
             <span>Open Recovery Center</span>
           </Link>
           <Link
             href="/audit"
-            className="px-4 py-2 rounded-lg bg-surface-elevated hover:bg-surface border border-border text-text-primary text-xs font-semibold transition-all"
+            className="px-3.5 py-2 rounded-lg bg-[#18181b] hover:bg-[#202024] border border-[#27272a] text-zinc-300 hover:text-white text-xs font-medium transition-colors"
           >
-            Full Audit Logs
+            Audit Trail
           </Link>
         </div>
       </div>
 
       {/* TOP METRICS 6-CARD GRID */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
         {/* Metric 1 */}
-        <div className="p-4 rounded-xl glass-panel border border-border space-y-2">
-          <div className="flex items-center justify-between text-text-muted">
+        <div className="p-4 rounded-lg bg-[#121214] border border-[#27272a] space-y-2">
+          <div className="flex items-center justify-between text-zinc-400">
             <span className="text-xs font-medium">Total Revenue</span>
-            <DollarSign className="w-4 h-4 text-primary-light" />
+            <DollarSign className="w-4 h-4 text-zinc-300" />
           </div>
           <div className="text-xl font-bold text-white">
             ₹{metrics.totalRevenue.toLocaleString("en-IN")}
@@ -166,22 +160,22 @@ export default function MerchantDashboard() {
         </div>
 
         {/* Metric 2 */}
-        <div className="p-4 rounded-xl glass-panel border border-primary/40 shadow-sm shadow-primary/10 space-y-2 bg-primary/5">
-          <div className="flex items-center justify-between text-primary-light">
-            <span className="text-xs font-semibold">Recovered by AI</span>
-            <RotateCcw className="w-4 h-4 text-accent-cyan" />
+        <div className="p-4 rounded-lg bg-[#121214] border border-zinc-700 space-y-2">
+          <div className="flex items-center justify-between text-zinc-300">
+            <span className="text-xs font-medium">Recovered by AI</span>
+            <RotateCcw className="w-4 h-4 text-emerald-400" />
           </div>
-          <div className="text-xl font-bold text-accent-cyan">
+          <div className="text-xl font-bold text-emerald-400">
             ₹{metrics.recoveredRevenue.toLocaleString("en-IN")}
           </div>
-          <div className="text-[11px] text-text-muted font-medium">
+          <div className="text-[11px] text-zinc-400 font-medium">
             13.7% of total revenue
           </div>
         </div>
 
         {/* Metric 3 */}
-        <div className="p-4 rounded-xl glass-panel border border-border space-y-2">
-          <div className="flex items-center justify-between text-text-muted">
+        <div className="p-4 rounded-lg bg-[#121214] border border-[#27272a] space-y-2">
+          <div className="flex items-center justify-between text-zinc-400">
             <span className="text-xs font-medium">Abandoned Carts</span>
             <ShoppingCart className="w-4 h-4 text-amber-400" />
           </div>
@@ -194,117 +188,97 @@ export default function MerchantDashboard() {
         </div>
 
         {/* Metric 4 */}
-        <div className="p-4 rounded-xl glass-panel border border-border space-y-2">
-          <div className="flex items-center justify-between text-text-muted">
+        <div className="p-4 rounded-lg bg-[#121214] border border-[#27272a] space-y-2">
+          <div className="flex items-center justify-between text-zinc-400">
             <span className="text-xs font-medium">Recovery Rate</span>
-            <Percent className="w-4 h-4 text-emerald-400" />
+            <Percent className="w-4 h-4 text-zinc-300" />
           </div>
-          <div className="text-xl font-bold text-emerald-400">
+          <div className="text-xl font-bold text-white">
             {metrics.recoveryRate}%
           </div>
           <div className="text-[11px] text-emerald-400 font-medium">
-            +3.2% above benchmark
+            +3.2% vs benchmark
           </div>
         </div>
 
         {/* Metric 5 */}
-        <div className="p-4 rounded-xl glass-panel border border-border space-y-2">
-          <div className="flex items-center justify-between text-text-muted">
+        <div className="p-4 rounded-lg bg-[#121214] border border-[#27272a] space-y-2">
+          <div className="flex items-center justify-between text-zinc-400">
             <span className="text-xs font-medium">Upsell Revenue</span>
-            <TrendingUp className="w-4 h-4 text-accent-purple" />
+            <TrendingUp className="w-4 h-4 text-zinc-300" />
           </div>
           <div className="text-xl font-bold text-white">
             ₹{metrics.upsellRevenue.toLocaleString("en-IN")}
           </div>
-          <div className="text-[11px] text-accent-purple font-medium">
+          <div className="text-[11px] text-zinc-400 font-medium">
             96% co-purchase match
           </div>
         </div>
 
         {/* Metric 6 */}
-        <div className="p-4 rounded-xl glass-panel border border-border space-y-2">
-          <div className="flex items-center justify-between text-text-muted">
+        <div className="p-4 rounded-lg bg-[#121214] border border-[#27272a] space-y-2">
+          <div className="flex items-center justify-between text-zinc-400">
             <span className="text-xs font-medium">Agent Actions</span>
-            <Zap className="w-4 h-4 text-blue-400" />
+            <Zap className="w-4 h-4 text-zinc-300" />
           </div>
           <div className="text-xl font-bold text-white">
             {metrics.agentActionsToday} Today
           </div>
-          <div className="text-[11px] text-text-muted font-medium">
+          <div className="text-[11px] text-zinc-400 font-medium">
             100% Policy Checked
           </div>
         </div>
       </div>
 
       {/* CHARTS SECTION */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* Revenue Growth Trend */}
-        <div className="lg:col-span-2 p-5 rounded-2xl glass-panel border border-border space-y-4">
+        <div className="lg:col-span-2 p-5 rounded-xl bg-[#121214] border border-[#27272a] space-y-4">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-base font-bold text-white">
-                Autonomous Revenue Trajectory
+              <h3 className="text-sm font-semibold text-white">
+                Revenue Trajectory
               </h3>
-              <p className="text-xs text-text-muted">
-                Baseline Revenue vs Recovered Revenue vs Upsells
+              <p className="text-xs text-zinc-400">
+                Baseline Revenue vs Recovered Revenue
               </p>
             </div>
-            <div className="flex items-center gap-4 text-xs font-mono">
-              <span className="flex items-center gap-1.5 text-primary-light">
-                <span className="w-2.5 h-2.5 rounded-full bg-primary" /> Total
+            <div className="flex items-center gap-3 text-xs">
+              <span className="flex items-center gap-1.5 text-zinc-300">
+                <span className="w-2 h-2 rounded-full bg-zinc-300" /> Total
               </span>
-              <span className="flex items-center gap-1.5 text-accent-cyan">
-                <span className="w-2.5 h-2.5 rounded-full bg-accent-cyan" />{" "}
-                Recovered
-              </span>
-              <span className="flex items-center gap-1.5 text-accent-purple">
-                <span className="w-2.5 h-2.5 rounded-full bg-accent-purple" />{" "}
-                Upsell
+              <span className="flex items-center gap-1.5 text-emerald-400">
+                <span className="w-2 h-2 rounded-full bg-emerald-400" /> Recovered
               </span>
             </div>
           </div>
 
-          <div className="h-64 w-full">
+          <div className="h-60 w-full">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart
                 data={REVENUE_DATA}
                 margin={{ top: 10, right: 10, left: 0, bottom: 0 }}
               >
-                <defs>
-                  <linearGradient id="colorTotal" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#6366F1" stopOpacity={0.4} />
-                    <stop offset="95%" stopColor="#6366F1" stopOpacity={0} />
-                  </linearGradient>
-                  <linearGradient
-                    id="colorRecovered"
-                    x1="0"
-                    y1="0"
-                    x2="0"
-                    y2="1"
-                  >
-                    <stop offset="5%" stopColor="#06B6D4" stopOpacity={0.6} />
-                    <stop offset="95%" stopColor="#06B6D4" stopOpacity={0} />
-                  </linearGradient>
-                </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#1E293B" />
+                <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
                 <XAxis
                   dataKey="month"
-                  stroke="#64748B"
-                  fontSize={12}
+                  stroke="#71717a"
+                  fontSize={11}
                   tickLine={false}
                 />
                 <YAxis
-                  stroke="#64748B"
-                  fontSize={12}
+                  stroke="#71717a"
+                  fontSize={11}
                   tickLine={false}
                   tickFormatter={(v) => `₹${v / 1000}k`}
                 />
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: "#111726",
-                    borderColor: "#1F2A44",
-                    borderRadius: "8px",
-                    color: "#fff",
+                    backgroundColor: "#18181b",
+                    borderColor: "#27272a",
+                    borderRadius: "6px",
+                    color: "#fafafa",
+                    fontSize: "12px",
                   }}
                   formatter={(value: any) => [
                     `₹${Number(value).toLocaleString("en-IN")}`,
@@ -314,18 +288,18 @@ export default function MerchantDashboard() {
                 <Area
                   type="monotone"
                   dataKey="total"
-                  stroke="#6366F1"
-                  strokeWidth={2}
-                  fillOpacity={1}
-                  fill="url(#colorTotal)"
+                  stroke="#ffffff"
+                  strokeWidth={1.5}
+                  fill="#ffffff"
+                  fillOpacity={0.05}
                 />
                 <Area
                   type="monotone"
                   dataKey="recovered"
-                  stroke="#06B6D4"
-                  strokeWidth={2}
-                  fillOpacity={1}
-                  fill="url(#colorRecovered)"
+                  stroke="#10b981"
+                  strokeWidth={1.5}
+                  fill="#10b981"
+                  fillOpacity={0.1}
                 />
               </AreaChart>
             </ResponsiveContainer>
@@ -333,17 +307,17 @@ export default function MerchantDashboard() {
         </div>
 
         {/* Campaign Funnel Chart */}
-        <div className="p-5 rounded-2xl glass-panel border border-border space-y-4">
+        <div className="p-5 rounded-xl bg-[#121214] border border-[#27272a] space-y-4">
           <div>
-            <h3 className="text-base font-bold text-white">
-              Campaign Conversion Funnel
+            <h3 className="text-sm font-semibold text-white">
+              Recovery Funnel
             </h3>
-            <p className="text-xs text-text-muted">
-              Outreach → Restoration → Razorpay Order
+            <p className="text-xs text-zinc-400">
+              Outreach → Restoration → Order
             </p>
           </div>
 
-          <div className="h-64 w-full">
+          <div className="h-60 w-full">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart
                 data={CAMPAIGN_FUNNEL}
@@ -352,33 +326,34 @@ export default function MerchantDashboard() {
               >
                 <CartesianGrid
                   strokeDasharray="3 3"
-                  stroke="#1E293B"
+                  stroke="#27272a"
                   horizontal={false}
                 />
                 <XAxis
                   type="number"
-                  stroke="#64748B"
-                  fontSize={11}
+                  stroke="#71717a"
+                  fontSize={10}
                   tickLine={false}
                 />
                 <YAxis
                   type="category"
                   dataKey="stage"
-                  stroke="#94A3B8"
+                  stroke="#a1a1aa"
                   fontSize={10}
                   tickLine={false}
-                  width={100}
+                  width={95}
                 />
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: "#111726",
-                    borderColor: "#1F2A44",
-                    borderRadius: "8px",
-                    color: "#fff",
+                    backgroundColor: "#18181b",
+                    borderColor: "#27272a",
+                    borderRadius: "6px",
+                    color: "#fafafa",
+                    fontSize: "12px",
                   }}
                   formatter={(value: any) => [value, "Carts"]}
                 />
-                <Bar dataKey="count" radius={[0, 4, 4, 0]} />
+                <Bar dataKey="count" radius={[0, 3, 3, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -386,50 +361,43 @@ export default function MerchantDashboard() {
       </div>
 
       {/* REVENUE OPPORTUNITY FEED & AGENT ACTIVITY FEED */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* Left: Revenue Opportunity Feed */}
-        <div className="p-5 rounded-2xl glass-panel border border-border space-y-4">
-          <div className="flex items-center justify-between pb-3 border-b border-border">
+        <div className="p-5 rounded-xl bg-[#121214] border border-[#27272a] space-y-4">
+          <div className="flex items-center justify-between pb-3 border-b border-[#27272a]">
             <div className="flex items-center gap-2">
-              <Sparkles className="w-4 h-4 text-accent-cyan" />
-              <h3 className="text-base font-bold text-white">
-                Revenue Opportunity Feed
+              <Sparkles className="w-4 h-4 text-zinc-300" />
+              <h3 className="text-sm font-semibold text-white">
+                Revenue Opportunities
               </h3>
             </div>
-            <span className="text-[11px] font-mono text-text-muted">
-              {opportunities.length} Actionable Opportunities
+            <span className="text-[11px] font-mono text-zinc-500">
+              {opportunities.length} Actionable
             </span>
           </div>
 
-          <div className="space-y-3">
+          <div className="space-y-2.5">
             {opportunities.map((opp) => (
               <div
                 key={opp.id}
-                className="p-4 rounded-xl bg-surface border border-border/80 hover:border-primary/40 transition-all space-y-3"
+                className="p-3.5 rounded-lg bg-[#18181b] border border-[#27272a] space-y-2.5"
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/30 uppercase">
-                    {opp.urgency} Opportunity
+                  <span className="text-[10px] font-mono font-medium px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-300 border border-zinc-700 uppercase">
+                    {opp.urgency} Priority
                   </span>
-                  <span className="text-sm font-bold text-white">
+                  <span className="text-xs font-semibold text-white">
                     ₹{opp.cartValue.toLocaleString("en-IN")}
                   </span>
                 </div>
 
-                <div className="text-xs text-text-secondary">
-                  Customer:{" "}
-                  <span className="text-white font-semibold">
-                    {opp.customerName}
-                  </span>{" "}
-                  • Intent Score:{" "}
-                  <span className="text-accent-cyan font-bold">
-                    {opp.intentScore}%
-                  </span>
+                <div className="text-xs text-zinc-300">
+                  Customer: <span className="text-white font-medium">{opp.customerName}</span> • Intent Score: <span className="text-emerald-400 font-mono font-semibold">{opp.intentScore}%</span>
                 </div>
 
-                <div className="text-xs text-text-muted bg-black/30 p-2.5 rounded-lg border border-white/5">
-                  <span className="text-primary-light font-semibold">
-                    Recommended Action:
+                <div className="text-xs text-zinc-400 bg-black/40 p-2 rounded border border-white/5">
+                  <span className="text-zinc-200 font-medium">
+                    Recommended:
                   </span>{" "}
                   {opp.recommendedAction}
                 </div>
@@ -437,15 +405,15 @@ export default function MerchantDashboard() {
                 <div className="flex items-center justify-between pt-1">
                   <button
                     onClick={() => setSelectedOpportunity(opp)}
-                    className="text-xs text-accent-cyan hover:text-white flex items-center gap-1 font-semibold transition-colors"
+                    className="text-xs text-zinc-400 hover:text-white flex items-center gap-1 font-medium transition-colors"
                   >
                     <Eye className="w-3.5 h-3.5" />
-                    View Agent Reasoning
+                    Agent Reasoning
                   </button>
 
                   <Link
                     href={`/recovery?cartId=${opp.cartId}`}
-                    className="px-3 py-1.5 rounded-lg bg-primary/20 hover:bg-primary text-primary-light hover:text-white text-xs font-semibold transition-all"
+                    className="px-2.5 py-1 rounded bg-zinc-800 hover:bg-zinc-700 text-white text-xs font-medium border border-zinc-700 transition-colors"
                   >
                     Trigger Recovery
                   </Link>
@@ -456,34 +424,34 @@ export default function MerchantDashboard() {
         </div>
 
         {/* Right: Agent Activity Feed */}
-        <div className="p-5 rounded-2xl glass-panel border border-border space-y-4">
-          <div className="flex items-center justify-between pb-3 border-b border-border">
+        <div className="p-5 rounded-xl bg-[#121214] border border-[#27272a] space-y-4">
+          <div className="flex items-center justify-between pb-3 border-b border-[#27272a]">
             <div className="flex items-center gap-2">
-              <Zap className="w-4 h-4 text-primary-light" />
-              <h3 className="text-base font-bold text-white">
-                Real-Time Agent Activity Feed
+              <Zap className="w-4 h-4 text-zinc-300" />
+              <h3 className="text-sm font-semibold text-white">
+                Live Agent Activity Feed
               </h3>
             </div>
-            <span className="text-[11px] font-mono text-emerald-400 flex items-center gap-1">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-              Live Stream
+            <span className="text-[11px] font-mono text-zinc-400 flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+              Active
             </span>
           </div>
 
-          <div className="space-y-2.5 max-h-[360px] overflow-y-auto pr-1">
+          <div className="space-y-2 max-h-[360px] overflow-y-auto pr-1">
             {activityLogs.map((log) => (
               <div
                 key={log.id}
-                className="p-3 rounded-lg bg-surface/70 border border-border/60 text-xs space-y-1 hover:border-border transition-colors"
+                className="p-2.5 rounded-lg bg-[#18181b] border border-[#27272a] text-xs space-y-1"
               >
                 <div className="flex items-center justify-between gap-2">
                   <AuditBadge type={log.type} size="sm" />
-                  <span className="text-[10px] font-mono text-text-muted">
+                  <span className="text-[10px] font-mono text-zinc-500">
                     {new Date(log.timestamp).toLocaleTimeString()}
                   </span>
                 </div>
-                <div className="font-semibold text-white">{log.title}</div>
-                <div className="text-text-secondary text-[11px] leading-relaxed">
+                <div className="font-medium text-white">{log.title}</div>
+                <div className="text-zinc-400 text-[11px] leading-relaxed">
                   {log.detail}
                 </div>
               </div>
@@ -494,32 +462,31 @@ export default function MerchantDashboard() {
 
       {/* MERCHANT POLICY ENGINE CONTROLS */}
       {policies && (
-        <div className="p-6 rounded-2xl glass-panel border border-border space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-border">
+        <div className="p-5 rounded-xl bg-[#121214] border border-[#27272a] space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-[#27272a]">
             <div className="flex items-center gap-2">
-              <ShieldCheck className="w-5 h-5 text-amber-400" />
+              <ShieldCheck className="w-4 h-4 text-zinc-300" />
               <div>
-                <h3 className="text-base font-bold text-white">
-                  Merchant AI Policy Engine
+                <h3 className="text-sm font-semibold text-white">
+                  Merchant Policy Safety Engine
                 </h3>
-                <p className="text-xs text-text-muted">
-                  Configure safety boundaries, communication limits, and
-                  discount thresholds
+                <p className="text-xs text-zinc-400">
+                  Configure safety guardrails, communication limits, and discount thresholds
                 </p>
               </div>
             </div>
             {policyFeedback && (
-              <span className="text-xs font-mono text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded border border-emerald-500/30">
+              <span className="text-xs font-mono text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-800/50">
                 {policyFeedback}
               </span>
             )}
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
             {/* Setting 1 */}
-            <div className="p-3.5 rounded-xl bg-surface border border-border space-y-2">
-              <label className="text-xs font-medium text-text-secondary block">
-                Max WhatsApp Outreach / Wk
+            <div className="p-3 rounded-lg bg-[#18181b] border border-[#27272a] space-y-1.5">
+              <label className="text-xs font-medium text-zinc-300 block">
+                Max Outreach / Week
               </label>
               <div className="flex items-center gap-2">
                 <input
@@ -533,20 +500,18 @@ export default function MerchantDashboard() {
                       parseInt(e.target.value) || 2,
                     )
                   }
-                  className="w-full px-3 py-1.5 rounded-lg bg-surface-elevated border border-border text-white text-xs font-mono focus:outline-none focus:border-primary"
+                  className="w-full px-2.5 py-1 rounded bg-[#121214] border border-[#27272a] text-white text-xs font-mono focus:outline-none focus:border-zinc-500"
                 />
-                <span className="text-xs text-text-muted whitespace-nowrap">
-                  msgs
-                </span>
+                <span className="text-xs text-zinc-500">msgs</span>
               </div>
-              <p className="text-[10px] text-text-muted">
-                Prevents customer message spam
+              <p className="text-[10px] text-zinc-500">
+                Prevents message fatigue
               </p>
             </div>
 
             {/* Setting 2 */}
-            <div className="p-3.5 rounded-xl bg-surface border border-border space-y-2">
-              <label className="text-xs font-medium text-text-secondary block">
+            <div className="p-3 rounded-lg bg-[#18181b] border border-[#27272a] space-y-1.5">
+              <label className="text-xs font-medium text-zinc-300 block">
                 Min Cart Value For Recovery
               </label>
               <div className="flex items-center gap-2">
@@ -560,18 +525,18 @@ export default function MerchantDashboard() {
                       parseFloat(e.target.value) || 500,
                     )
                   }
-                  className="w-full px-3 py-1.5 rounded-lg bg-surface-elevated border border-border text-white text-xs font-mono focus:outline-none focus:border-primary"
+                  className="w-full px-2.5 py-1 rounded bg-[#121214] border border-[#27272a] text-white text-xs font-mono focus:outline-none focus:border-zinc-500"
                 />
-                <span className="text-xs text-text-muted">INR</span>
+                <span className="text-xs text-zinc-500">INR</span>
               </div>
-              <p className="text-[10px] text-text-muted">
-                Threshold to justify agent cost
+              <p className="text-[10px] text-zinc-500">
+                Minimum order qualification
               </p>
             </div>
 
             {/* Setting 3 */}
-            <div className="p-3.5 rounded-xl bg-surface border border-border space-y-2">
-              <label className="text-xs font-medium text-text-secondary block">
+            <div className="p-3 rounded-lg bg-[#18181b] border border-[#27272a] space-y-1.5">
+              <label className="text-xs font-medium text-zinc-300 block">
                 Min Inactivity Window
               </label>
               <div className="flex items-center gap-2">
@@ -585,30 +550,30 @@ export default function MerchantDashboard() {
                       parseInt(e.target.value) || 30,
                     )
                   }
-                  className="w-full px-3 py-1.5 rounded-lg bg-surface-elevated border border-border text-white text-xs font-mono focus:outline-none focus:border-primary"
+                  className="w-full px-2.5 py-1 rounded bg-[#121214] border border-[#27272a] text-white text-xs font-mono focus:outline-none focus:border-zinc-500"
                 />
-                <span className="text-xs text-text-muted">mins</span>
+                <span className="text-xs text-zinc-500">mins</span>
               </div>
-              <p className="text-[10px] text-text-muted">
-                Avoids premature intervention
+              <p className="text-[10px] text-zinc-500">
+                Prevents premature triggers
               </p>
             </div>
 
             {/* Setting 4 */}
-            <div className="p-3.5 rounded-xl bg-surface border border-border space-y-2">
-              <label className="text-xs font-medium text-text-secondary block">
+            <div className="p-3 rounded-lg bg-[#18181b] border border-[#27272a] space-y-1.5">
+              <label className="text-xs font-medium text-zinc-300 block">
                 Payment Approval
               </label>
-              <div className="flex items-center justify-between py-1">
-                <span className="text-xs font-semibold text-emerald-400">
+              <div className="flex items-center justify-between py-0.5">
+                <span className="text-xs font-medium text-zinc-200">
                   Strictly Required
                 </span>
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 font-bold">
-                  LOCKED
+                <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-300 border border-zinc-700">
+                  ENFORCED
                 </span>
               </div>
-              <p className="text-[10px] text-text-muted">
-                Zero silent charges guaranteed
+              <p className="text-[10px] text-zinc-500">
+                No autonomous billing
               </p>
             </div>
           </div>
@@ -617,47 +582,47 @@ export default function MerchantDashboard() {
 
       {/* AGENT REASONING MODAL */}
       {selectedOpportunity && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-in fade-in">
-          <div className="w-full max-w-lg bg-surface-elevated border border-border rounded-2xl shadow-2xl p-6 space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-border">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in">
+          <div className="w-full max-w-lg bg-[#121214] border border-[#27272a] rounded-xl shadow-2xl p-5 space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-[#27272a]">
               <div className="flex items-center gap-2">
-                <Zap className="w-5 h-5 text-accent-cyan" />
-                <h3 className="text-base font-bold text-white">
+                <Zap className="w-4 h-4 text-zinc-300" />
+                <h3 className="text-sm font-semibold text-white">
                   Agent Reasoning Breakdown
                 </h3>
               </div>
               <button
                 onClick={() => setSelectedOpportunity(null)}
-                className="p-1 rounded text-text-muted hover:text-white"
+                className="p-1 rounded text-zinc-400 hover:text-white"
               >
-                <X className="w-5 h-5" />
+                <X className="w-4 h-4" />
               </button>
             </div>
 
-            <div className="space-y-3 text-xs text-text-secondary">
-              <div className="p-3 rounded-lg bg-surface border border-border space-y-1">
-                <div className="text-text-muted">Target Customer:</div>
-                <div className="text-sm font-bold text-white">
+            <div className="space-y-3 text-xs text-zinc-300">
+              <div className="p-3 rounded-lg bg-[#18181b] border border-[#27272a] space-y-1">
+                <div className="text-zinc-400">Target Customer:</div>
+                <div className="text-sm font-semibold text-white">
                   {selectedOpportunity.customerName}
                 </div>
-                <div className="text-text-muted">
+                <div className="text-zinc-400">
                   Cart Value: ₹
                   {selectedOpportunity.cartValue.toLocaleString("en-IN")}
                 </div>
               </div>
 
-              <div className="p-3 rounded-lg bg-surface border border-border space-y-2">
-                <div className="font-bold text-primary-light">
+              <div className="p-3 rounded-lg bg-[#18181b] border border-[#27272a] space-y-1.5">
+                <div className="font-semibold text-zinc-200">
                   Growth Agent Decision Summary:
                 </div>
-                <p className="text-white leading-relaxed">
+                <p className="text-zinc-300 leading-relaxed">
                   {selectedOpportunity.reasoning}
                 </p>
               </div>
 
-              <div className="p-3 rounded-lg bg-surface border border-border flex items-center justify-between">
+              <div className="p-3 rounded-lg bg-[#18181b] border border-[#27272a] flex items-center justify-between">
                 <span>Calculated Intent Score:</span>
-                <span className="text-sm font-bold text-accent-cyan">
+                <span className="text-sm font-bold text-emerald-400">
                   {selectedOpportunity.intentScore} / 100
                 </span>
               </div>
@@ -666,7 +631,7 @@ export default function MerchantDashboard() {
             <div className="pt-2 flex justify-end gap-2">
               <Link
                 href={`/recovery?cartId=${selectedOpportunity.cartId}`}
-                className="px-4 py-2 rounded-lg bg-primary text-white text-xs font-bold hover:bg-primary-hover transition-all"
+                className="px-3.5 py-1.5 rounded-lg bg-white text-black text-xs font-semibold hover:bg-zinc-200 transition-colors"
               >
                 Go to Recovery Workflow
               </Link>

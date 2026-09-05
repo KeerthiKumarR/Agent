@@ -4,17 +4,15 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-  Bot,
   LayoutDashboard,
-  ShoppingBag,
+  Bot,
   ShoppingCart,
-  ShieldCheck,
   RotateCcw,
   Send,
   FileText,
   Sliders,
   Sparkles,
-  Zap,
+  Command,
 } from "lucide-react";
 
 interface NavbarProps {
@@ -37,19 +35,18 @@ export default function Navbar({ onOpenDemoControls }: NavbarProps) {
           ) || 0;
         setCartCount(totalItems);
       }
-    } catch (e) {
+    } catch {
       // ignore
     }
   };
 
   useEffect(() => {
     fetchCart();
-    const interval = setInterval(fetchCart, 3000);
+    const interval = setInterval(fetchCart, 4000);
     return () => clearInterval(interval);
   }, [pathname]);
 
   const navItems = [
-    { name: "Home", href: "/", icon: Sparkles },
     { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
     { name: "AI Shop", href: "/shop", icon: Bot },
     { name: "Cart", href: "/cart", icon: ShoppingCart, badge: cartCount },
@@ -59,25 +56,25 @@ export default function Navbar({ onOpenDemoControls }: NavbarProps) {
   ];
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-border bg-[#080C14]/80 backdrop-blur-md">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+    <header className="sticky top-0 z-40 w-full border-b border-[#27272a] bg-[#09090b]/90 backdrop-blur-md">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
         {/* Brand Logo */}
         <Link href="/" className="flex items-center gap-2.5 group">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-primary to-accent-cyan flex items-center justify-center shadow-lg shadow-primary/20 group-hover:scale-105 transition-transform">
-            <Zap className="w-5 h-5 text-white" />
+          <div className="w-7 h-7 rounded-lg bg-white text-black flex items-center justify-center font-bold text-sm tracking-tight transition-transform group-hover:scale-105">
+            <Command className="w-4 h-4" />
           </div>
-          <div>
-            <span className="font-bold text-lg tracking-tight text-white flex items-center gap-1.5">
-              Commerce<span className="gradient-text-indigo">Pilot</span>
+          <div className="flex items-baseline gap-1.5">
+            <span className="font-semibold text-sm tracking-tight text-white">
+              CommercePilot
             </span>
-            <span className="block text-[10px] font-mono tracking-widest text-accent-cyan uppercase font-semibold">
-              Autonomous Growth Agent
+            <span className="text-[10px] text-zinc-500 font-mono">
+              Enterprise
             </span>
           </div>
         </Link>
 
         {/* Navigation Links */}
-        <nav className="hidden md:flex items-center space-x-1 lg:space-x-1.5">
+        <nav className="hidden md:flex items-center space-x-1">
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = pathname === item.href;
@@ -85,18 +82,18 @@ export default function Navbar({ onOpenDemoControls }: NavbarProps) {
               <Link
                 key={item.name}
                 href={item.href}
-                className={`relative px-3 py-1.5 rounded-lg text-xs font-medium flex items-center gap-1.5 transition-all duration-200 ${
+                className={`relative px-3 py-1.5 rounded-md text-xs font-medium flex items-center gap-1.5 transition-colors ${
                   isActive
-                    ? "bg-primary/20 text-white border border-primary/40 shadow-sm shadow-primary/20"
-                    : "text-text-secondary hover:text-white hover:bg-surface-elevated"
+                    ? "bg-[#18181b] text-white border border-[#3f3f46]"
+                    : "text-zinc-400 hover:text-white hover:bg-[#121214]"
                 }`}
               >
                 <Icon
-                  className={`w-3.5 h-3.5 ${isActive ? "text-primary-light" : "text-text-muted"}`}
+                  className={`w-3.5 h-3.5 ${isActive ? "text-white" : "text-zinc-500"}`}
                 />
                 <span>{item.name}</span>
                 {item.badge !== undefined && item.badge > 0 && (
-                  <span className="ml-1 px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-primary text-white">
+                  <span className="ml-1 px-1.5 py-0.5 rounded-full text-[10px] font-semibold bg-zinc-700 text-zinc-200">
                     {item.badge}
                   </span>
                 )}
@@ -106,7 +103,7 @@ export default function Navbar({ onOpenDemoControls }: NavbarProps) {
         </nav>
 
         {/* Right Action: Demo Controls Trigger */}
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-2">
           <button
             onClick={() => {
               if (onOpenDemoControls) {
@@ -115,14 +112,11 @@ export default function Navbar({ onOpenDemoControls }: NavbarProps) {
                 window.dispatchEvent(new CustomEvent("open-demo-controls"));
               }
             }}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gradient-to-r from-accent-purple/20 to-primary/20 border border-primary/40 text-primary-light hover:text-white hover:border-primary text-xs font-semibold shadow-md shadow-primary/10 transition-all hover:scale-105 active:scale-95"
-            title="Open Interactive Demo Controls"
+            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-md bg-[#18181b] border border-[#27272a] hover:border-[#3f3f46] text-zinc-300 hover:text-white text-xs font-medium transition-colors"
+            title="Open Demo Scenarios & Controls"
           >
-            <Sliders className="w-3.5 h-3.5 text-accent-purple" />
+            <Sliders className="w-3.5 h-3.5 text-zinc-400" />
             <span className="hidden sm:inline">Demo Controls</span>
-            <span className="px-1 py-0.5 rounded text-[9px] bg-primary/40 text-accent-cyan uppercase font-mono font-bold">
-              Live
-            </span>
           </button>
         </div>
       </div>

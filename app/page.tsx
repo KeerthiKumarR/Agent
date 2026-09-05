@@ -8,186 +8,142 @@ import {
   ShieldCheck,
   CreditCard,
   ArrowRight,
-  Sparkles,
-  RotateCcw,
-  CheckCircle2,
   Zap,
-  Activity,
+  CheckCircle2,
   ChevronRight,
-  Layers,
   FileText,
-  Sliders,
+  RotateCcw,
+  Send,
 } from "lucide-react";
 
 export default function LandingPage() {
   const workflowSteps = [
     {
       title: "AI Buyer",
-      role: "Conversational Request",
+      role: "Conversational Discovery",
       icon: Bot,
-      color: "text-blue-400",
-      bg: "bg-blue-500/10 border-blue-500/30",
     },
     {
       title: "Commerce Agent",
-      role: "Catalog Match & Score",
+      role: "Catalog Matching",
       icon: Zap,
-      color: "text-indigo-400",
-      bg: "bg-indigo-500/10 border-indigo-500/30",
     },
     {
       title: "Growth Agent",
       role: "Smart Upsell & Intent",
       icon: TrendingUp,
-      color: "text-cyan-400",
-      bg: "bg-cyan-500/10 border-cyan-500/30",
     },
     {
       title: "Policy Engine",
       role: "Safety Boundaries",
       icon: ShieldCheck,
-      color: "text-amber-400",
-      bg: "bg-amber-500/10 border-amber-500/30",
     },
     {
       title: "Razorpay",
-      role: "Bounded Payment",
+      role: "Bounded Checkout",
       icon: CreditCard,
-      color: "text-emerald-400",
-      bg: "bg-emerald-500/10 border-emerald-500/30",
     },
     {
       title: "Audit Trail",
       role: "Explainable Ledger",
       icon: FileText,
-      color: "text-purple-400",
-      bg: "bg-purple-500/10 border-purple-500/30",
     },
   ];
 
   return (
-    <div className="relative overflow-hidden pt-6 pb-20">
-      {/* Glow gradient blobs */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[450px] bg-gradient-to-b from-primary/20 via-accent-cyan/10 to-transparent blur-[120px] pointer-events-none -z-10" />
-      <div className="absolute top-80 right-10 w-[400px] h-[400px] bg-accent-purple/10 blur-[140px] pointer-events-none -z-10" />
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-24">
+    <div className="relative overflow-hidden pt-8 pb-20">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-20">
         {/* HERO SECTION */}
-        <section className="text-center space-y-8 pt-8 md:pt-16 max-w-4xl mx-auto">
+        <section className="text-center space-y-6 pt-10 md:pt-16 max-w-3xl mx-auto">
           {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-surface-elevated border border-primary/40 shadow-inner">
-            <span className="w-2 h-2 rounded-full bg-accent-cyan animate-ping" />
-            <span className="text-xs font-semibold tracking-wide gradient-text-indigo">
-              Autonomous Growth & Agentic Commerce Platform
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#18181b] border border-[#27272a]">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+            <span className="text-xs font-medium text-zinc-300">
+              Autonomous Growth & Bounded Commerce
             </span>
           </div>
 
           {/* Headline */}
-          <h1 className="text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-white leading-[1.1]">
-            Turn Every Customer Signal Into{" "}
-            <span className="gradient-text-indigo">Revenue.</span>
+          <h1 className="text-4xl sm:text-6xl font-bold tracking-tight text-white leading-[1.15]">
+            Autonomous Commerce & Revenue Recovery for Modern Merchants
           </h1>
 
           {/* Subheadline */}
-          <p className="text-lg sm:text-xl text-text-secondary max-w-2xl mx-auto font-normal leading-relaxed">
-            CommercePilot makes merchants AI-native and deploys autonomous
-            growth agents to recover lost revenue, personalize campaigns, and
-            drive intelligent commerce with explainable trust boundaries.
+          <p className="text-base sm:text-lg text-zinc-400 max-w-2xl mx-auto leading-relaxed">
+            CommercePilot deploys autonomous agents to observe cart telemetry, calculate purchase intent, enforce merchant policies, and recover lost sales with strict auditability.
           </p>
 
           {/* Action Buttons */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
             <Link
               href="/shop"
-              className="w-full sm:w-auto px-8 py-4 rounded-xl bg-gradient-to-r from-primary via-indigo-500 to-accent-cyan text-white font-bold text-base shadow-xl shadow-primary/25 hover:shadow-primary/40 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+              className="w-full sm:w-auto px-6 py-3 rounded-lg bg-white text-black font-semibold text-sm hover:bg-zinc-200 transition-colors flex items-center justify-center gap-2"
             >
-              <Bot className="w-5 h-5" />
-              <span>Launch Demo</span>
+              <span>Explore AI Commerce Shop</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
 
             <Link
               href="/dashboard"
-              className="w-full sm:w-auto px-8 py-4 rounded-xl bg-surface-elevated hover:bg-surface border border-border hover:border-primary/40 text-text-primary font-bold text-base transition-all flex items-center justify-center gap-2"
+              className="w-full sm:w-auto px-6 py-3 rounded-lg bg-[#18181b] hover:bg-[#202024] border border-[#27272a] text-zinc-200 font-medium text-sm transition-colors flex items-center justify-center gap-2"
             >
-              <span>View Merchant Dashboard</span>
-              <ChevronRight className="w-4 h-4 text-text-muted" />
+              <span>Merchant Dashboard</span>
+              <ChevronRight className="w-4 h-4 text-zinc-500" />
             </Link>
           </div>
 
-          {/* Live Platform Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-10 border-t border-border/60">
-            <div className="p-4 rounded-xl glass-panel text-left">
-              <div className="text-2xl font-extrabold text-white">
-                ₹2,48,500
-              </div>
-              <div className="text-xs text-text-muted font-medium">
-                Merchant Revenue
-              </div>
+          {/* Key Metrics */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 pt-8 border-t border-[#27272a]">
+            <div className="p-4 rounded-lg bg-[#121214] border border-[#27272a] text-left">
+              <div className="text-xl font-bold text-white">₹2,48,500</div>
+              <div className="text-xs text-zinc-400 mt-0.5">Tracked Revenue</div>
             </div>
-            <div className="p-4 rounded-xl glass-panel text-left">
-              <div className="text-2xl font-extrabold text-accent-emerald">
-                ₹34,200
-              </div>
-              <div className="text-xs text-text-muted font-medium">
-                Recovered by Agents
-              </div>
+            <div className="p-4 rounded-lg bg-[#121214] border border-[#27272a] text-left">
+              <div className="text-xl font-bold text-emerald-400">₹34,200</div>
+              <div className="text-xs text-zinc-400 mt-0.5">Recovered Revenue</div>
             </div>
-            <div className="p-4 rounded-xl glass-panel text-left">
-              <div className="text-2xl font-extrabold text-accent-cyan">
-                18.4%
-              </div>
-              <div className="text-xs text-text-muted font-medium">
-                Cart Recovery Rate
-              </div>
+            <div className="p-4 rounded-lg bg-[#121214] border border-[#27272a] text-left">
+              <div className="text-xl font-bold text-white">18.4%</div>
+              <div className="text-xs text-zinc-400 mt-0.5">Recovery Rate</div>
             </div>
-            <div className="p-4 rounded-xl glass-panel text-left">
-              <div className="text-2xl font-extrabold text-primary-light">
-                100%
-              </div>
-              <div className="text-xs text-text-muted font-medium">
-                Bounded & Explainable
-              </div>
+            <div className="p-4 rounded-lg bg-[#121214] border border-[#27272a] text-left">
+              <div className="text-xl font-bold text-zinc-200">100%</div>
+              <div className="text-xs text-zinc-400 mt-0.5">Bounded & Audited</div>
             </div>
           </div>
         </section>
 
-        {/* VISUAL WORKFLOW PIPELINE */}
+        {/* WORKFLOW PIPELINE */}
         <section className="space-y-6">
-          <div className="text-center space-y-2">
-            <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
-              The Autonomous Commerce Pipeline
+          <div className="text-center space-y-1.5">
+            <h2 className="text-2xl font-bold text-white tracking-tight">
+              Agent Architecture & Lifecycle
             </h2>
-            <p className="text-sm text-text-muted max-w-xl mx-auto">
-              Every customer action is seamlessly coordinated across specialized
-              agents bounded by safety policies.
+            <p className="text-xs text-zinc-400 max-w-lg mx-auto">
+              Telemetry flows continuously from observation to verified bounded action.
             </p>
           </div>
 
-          {/* Workflow Graph */}
-          <div className="glass-panel-glow rounded-2xl p-6 sm:p-8">
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 relative">
+          {/* Steps */}
+          <div className="bg-[#121214] border border-[#27272a] rounded-xl p-6">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
               {workflowSteps.map((step, idx) => {
                 const Icon = step.icon;
                 return (
                   <div
                     key={step.title}
-                    className="flex flex-col items-center text-center p-4 rounded-xl bg-surface/80 border border-border/80 hover:border-primary transition-all duration-200 hover:-translate-y-1 group"
+                    className="flex flex-col items-center text-center p-3.5 rounded-lg bg-[#18181b] border border-[#27272a]"
                   >
-                    <div
-                      className={`w-12 h-12 rounded-xl flex items-center justify-center mb-3 border ${step.bg}`}
-                    >
-                      <Icon
-                        className={`w-6 h-6 ${step.color} group-hover:scale-110 transition-transform`}
-                      />
+                    <div className="w-9 h-9 rounded-lg bg-zinc-800 border border-zinc-700 flex items-center justify-center mb-2.5 text-zinc-200">
+                      <Icon className="w-4 h-4" />
                     </div>
-                    <span className="text-xs font-mono font-bold text-text-muted mb-1">
+                    <span className="text-[10px] font-mono text-zinc-500 mb-0.5">
                       0{idx + 1}
                     </span>
-                    <h3 className="text-sm font-bold text-white mb-0.5">
+                    <h3 className="text-xs font-semibold text-white mb-0.5">
                       {step.title}
                     </h3>
-                    <p className="text-[11px] text-text-secondary leading-tight">
+                    <p className="text-[11px] text-zinc-400 leading-tight">
                       {step.role}
                     </p>
                   </div>
@@ -196,169 +152,150 @@ export default function LandingPage() {
             </div>
 
             {/* Lifecycle banner */}
-            <div className="mt-6 pt-5 border-t border-border/60 flex flex-wrap items-center justify-between gap-4 text-xs font-mono">
-              <div className="flex items-center gap-2 text-text-secondary">
+            <div className="mt-5 pt-4 border-t border-[#27272a] flex flex-wrap items-center justify-between gap-3 text-xs">
+              <div className="flex items-center gap-2 text-zinc-400">
                 <span className="w-2 h-2 rounded-full bg-emerald-400" />
-                <span>Agent Core Loop:</span>
-                <span className="text-white font-bold">
+                <span>Lifecycle:</span>
+                <span className="text-zinc-200 font-mono font-medium">
                   Observe → Reason → Policy Check → Act → Verify → Learn
                 </span>
               </div>
               <Link
                 href="/audit"
-                className="text-primary-light hover:text-white flex items-center gap-1 font-semibold"
+                className="text-zinc-300 hover:text-white flex items-center gap-1 font-medium transition-colors"
               >
-                Inspect Live Audit Trail <ArrowRight className="w-3.5 h-3.5" />
+                Inspect Audit Trail <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             </div>
           </div>
         </section>
 
         {/* 4 CORE VALUE PILLARS */}
-        <section className="space-y-8">
-          <div className="text-center space-y-2">
-            <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
-              Enterprise Agentic Architecture
+        <section className="space-y-6">
+          <div className="text-center space-y-1.5">
+            <h2 className="text-2xl font-bold text-white tracking-tight">
+              Enterprise Platform Capabilities
             </h2>
-            <p className="text-sm text-text-muted">
-              Built for production resilience, zero hallucinated charges, and
-              maximum merchant revenue.
+            <p className="text-xs text-zinc-400">
+              Designed for reliability, strict policy enforcement, and seamless merchant control.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Pillar 1: AI-Native Commerce */}
-            <div className="p-6 sm:p-8 rounded-2xl glass-panel hover:border-primary/50 transition-all space-y-4">
-              <div className="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-400">
-                <Bot className="w-6 h-6" />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Pillar 1 */}
+            <div className="p-5 rounded-xl bg-[#121214] border border-[#27272a] space-y-3">
+              <div className="w-8 h-8 rounded-lg bg-zinc-800 border border-zinc-700 flex items-center justify-center text-zinc-300">
+                <Bot className="w-4 h-4" />
               </div>
-              <h3 className="text-xl font-bold text-white">
-                AI-Native Commerce & Catalog
+              <h3 className="text-base font-semibold text-white">
+                AI-Native Catalog & Natural Language Commerce
               </h3>
-              <p className="text-sm text-text-secondary leading-relaxed">
-                Publish machine-readable catalogs at{" "}
-                <code className="text-xs bg-black/40 px-1.5 py-0.5 rounded text-accent-cyan">
-                  /api/agent/catalog
-                </code>
-                . AI agents parse natural language requests, match buyer
-                specifications, and calculate transparent match scores.
+              <p className="text-xs text-zinc-400 leading-relaxed">
+                Machine-readable catalog endpoints allow autonomous buyer agents and customers to discover products with structured semantic attribute matching.
               </p>
-              <ul className="space-y-2 text-xs text-text-secondary">
+              <ul className="space-y-1.5 text-xs text-zinc-300">
                 <li className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                  Semantic feature indexing (e.g. HydroShield waterproofing,
-                  marathon usage)
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                  Direct semantic scoring and intent attribution
                 </li>
                 <li className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                  Instant conversational recommendation rationale
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                  Cart creation and dynamic cross-sell recommendations
                 </li>
               </ul>
             </div>
 
-            {/* Pillar 2: Autonomous Revenue Recovery */}
-            <div className="p-6 sm:p-8 rounded-2xl glass-panel hover:border-primary/50 transition-all space-y-4">
-              <div className="w-12 h-12 rounded-xl bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-purple-400">
-                <RotateCcw className="w-6 h-6" />
+            {/* Pillar 2 */}
+            <div className="p-5 rounded-xl bg-[#121214] border border-[#27272a] space-y-3">
+              <div className="w-8 h-8 rounded-lg bg-zinc-800 border border-zinc-700 flex items-center justify-center text-zinc-300">
+                <RotateCcw className="w-4 h-4" />
               </div>
-              <h3 className="text-xl font-bold text-white">
-                Autonomous Revenue Recovery
+              <h3 className="text-base font-semibold text-white">
+                Autonomous Abandoned Cart Recovery
               </h3>
-              <p className="text-sm text-text-secondary leading-relaxed">
-                When shoppers abandon carts, the Growth Agent scores intent
-                across 5 transparent telemetry factors before dispatching
-                personalized, non-aggressive WhatsApp recovery campaigns.
+              <p className="text-xs text-zinc-400 leading-relaxed">
+                Evaluates 5 distinct behavioral factors (dwell time, product views, checkout initiation, cart value, and inactivity) to trigger high-probability recovery.
               </p>
-              <ul className="space-y-2 text-xs text-text-secondary">
+              <ul className="space-y-1.5 text-xs text-zinc-300">
                 <li className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                  5-factor intent scoring (views, cart adds, dwell time, cart
-                  value, recency)
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                  Personalized WhatsApp recovery campaigns
                 </li>
                 <li className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                  One-click WhatsApp CTA restoring customer cart state
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                  1-Click cart restoration flow
                 </li>
               </ul>
             </div>
 
-            {/* Pillar 3: Safe Agent Actions */}
-            <div className="p-6 sm:p-8 rounded-2xl glass-panel hover:border-primary/50 transition-all space-y-4">
-              <div className="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400">
-                <ShieldCheck className="w-6 h-6" />
+            {/* Pillar 3 */}
+            <div className="p-5 rounded-xl bg-[#121214] border border-[#27272a] space-y-3">
+              <div className="w-8 h-8 rounded-lg bg-zinc-800 border border-zinc-700 flex items-center justify-center text-zinc-300">
+                <ShieldCheck className="w-4 h-4" />
               </div>
-              <h3 className="text-xl font-bold text-white">
-                Bounded Policy Engine
+              <h3 className="text-base font-semibold text-white">
+                Deterministic Policy Safety Engine
               </h3>
-              <p className="text-sm text-text-secondary leading-relaxed">
-                AI agents are never given unconstrained authority. Every
-                sensitive action is checked against merchant-configured rules:
-                frequency limits, minimum cart thresholds, and discount caps.
+              <p className="text-xs text-zinc-400 leading-relaxed">
+                Merchant boundaries prevent spam and protect margins with weekly frequency caps, minimum cart value thresholds, and inactivity guardrails.
               </p>
-              <ul className="space-y-2 text-xs text-text-secondary">
+              <ul className="space-y-1.5 text-xs text-zinc-300">
                 <li className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                  Strict 2 message/week anti-spam guardrail
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                  Hard guardrails on discount percentages and message volume
                 </li>
                 <li className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                  Zero silent charging: Payments require explicit human customer
-                  approval
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                  Full audit logging of every policy check
                 </li>
               </ul>
             </div>
 
-            {/* Pillar 4: Explainable Payments */}
-            <div className="p-6 sm:p-8 rounded-2xl glass-panel hover:border-primary/50 transition-all space-y-4">
-              <div className="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
-                <CreditCard className="w-6 h-6" />
+            {/* Pillar 4 */}
+            <div className="p-5 rounded-xl bg-[#121214] border border-[#27272a] space-y-3">
+              <div className="w-8 h-8 rounded-lg bg-zinc-800 border border-zinc-700 flex items-center justify-center text-zinc-300">
+                <CreditCard className="w-4 h-4" />
               </div>
-              <h3 className="text-xl font-bold text-white">
-                Explainable Razorpay Payments
+              <h3 className="text-base font-semibold text-white">
+                Bounded Razorpay Payment Trust
               </h3>
-              <p className="text-sm text-text-secondary leading-relaxed">
-                Secure Razorpay Test Mode integration with detailed Agent
-                Decision Summaries before payment. If a transaction fails, carts
-                are preserved with zero duplicate billing.
+              <p className="text-xs text-zinc-400 leading-relaxed">
+                Zero silent charges: payment authorization requires explicit user consent, backed by server-side HMAC signature verification and cart preservation.
               </p>
-              <ul className="space-y-2 text-xs text-text-secondary">
+              <ul className="space-y-1.5 text-xs text-zinc-300">
                 <li className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                  Real Razorpay Test Mode & HMAC verification
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                  Razorpay Test Mode integration with secure server orders
                 </li>
                 <li className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                  Resilient failure simulation and safe cart recovery
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                  Preserves shopping cart upon payment retry or decline
                 </li>
               </ul>
             </div>
           </div>
         </section>
 
-        {/* CTA BANNER */}
-        <section className="p-8 sm:p-12 rounded-3xl glass-panel-glow text-center space-y-6 relative overflow-hidden">
-          <div className="space-y-2 max-w-2xl mx-auto">
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-white">
-              Experience the Future of Agentic Commerce
-            </h2>
-            <p className="text-text-secondary text-sm sm:text-base">
-              Explore the conversational shop, inspect growth upsells, simulate
-              cart abandonment, and test bounded recovery workflows in
-              real-time.
-            </p>
-          </div>
-          <div className="flex flex-wrap items-center justify-center gap-4">
+        {/* BOTTOM CTA */}
+        <section className="bg-[#121214] border border-[#27272a] rounded-xl p-8 text-center space-y-4">
+          <h2 className="text-2xl font-bold text-white">
+            Ready to test the autonomous commerce workflow?
+          </h2>
+          <p className="text-xs text-zinc-400 max-w-md mx-auto">
+            Experience the complete flow from AI shopping to cart recovery and bounded payment.
+          </p>
+          <div className="pt-2 flex justify-center gap-3">
             <Link
               href="/shop"
-              className="px-8 py-3.5 rounded-xl bg-primary hover:bg-primary-hover text-white font-bold text-sm shadow-lg shadow-primary/30 transition-all"
+              className="px-5 py-2.5 rounded-lg bg-white text-black font-semibold text-xs hover:bg-zinc-200 transition-colors"
             >
-              Start Conversational Shopping
+              Start in AI Shop
             </Link>
             <Link
               href="/recovery"
-              className="px-8 py-3.5 rounded-xl bg-surface border border-border hover:border-primary text-text-primary font-bold text-sm transition-all"
+              className="px-5 py-2.5 rounded-lg bg-[#18181b] border border-[#27272a] text-zinc-300 hover:text-white text-xs font-medium transition-colors"
             >
-              Explore Recovery Center
+              Open Recovery Center
             </Link>
           </div>
         </section>

@@ -94,6 +94,23 @@ export async function createRazorpayOrder({
       razorpayOrderId = rzpOrder.id;
     }
 
+    // Persist Order in Supabase
+    await db.createOrder({
+      customerId: cart.customerId,
+      cartId,
+      razorpayOrderId,
+      amount,
+      currency,
+      status: "PENDING",
+      reasoning: `Order created via Razorpay Checkout. Cart contains ${cart.items.length} items.`,
+      itemsSummary: cart.items.map((i) => ({
+        productId: i.productId,
+        name: i.product?.name || "Product",
+        quantity: i.quantity,
+        price: i.price,
+      })),
+    });
+
     // Log to Audit Trail
     await db.addAuditLog({
       type: "ACTION",

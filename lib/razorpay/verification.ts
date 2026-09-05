@@ -32,6 +32,18 @@ export async function verifyRazorpayPayment({
 
   // Handle Failure Simulation
   if (simulateFailure) {
+    await db.updateOrderStatus(razorpayOrderId, "FAILED");
+    const cart = await db.getCartById(cartId);
+    if (cart) {
+      await db.createPayment({
+        razorpayOrderId,
+        razorpayPaymentId,
+        amount: cart.total,
+        status: "FAILED",
+        failureReason: "Simulated payment failure (declined by card issuer)",
+      });
+    }
+
     await db.addAuditLog({
       type: "FAILURE",
       title: "Payment Authorization Unsuccessful (Simulated)",
@@ -63,6 +75,19 @@ export async function verifyRazorpayPayment({
       .digest("hex");
 
     if (generatedSignature !== razorpaySignature) {
+      await db.updateOrderStatus(razorpayOrderId, "FAILED");
+      const cart = await db.getCartById(cartId);
+      if (cart) {
+        await db.createPayment({
+          razorpayOrderId,
+          razorpayPaymentId,
+          razorpaySignature,
+          amount: cart.total,
+          status: "FAILED",
+          failureReason: "HMAC signature mismatch",
+        });
+      }
+
       await db.addAuditLog({
         type: "FAILURE",
         title: "Payment Signature Mismatch",
@@ -79,6 +104,19 @@ export async function verifyRazorpayPayment({
         cartPreserved: true,
       };
     }
+  }
+
+  // Update Order Status and Record Payment in Supabase
+  await db.updateOrderStatus(razorpayOrderId, "PAID");
+  const cart = await db.getCartById(cartId);
+  if (cart) {
+    await db.createPayment({
+      razorpayOrderId,
+      razorpayPaymentId,
+      razorpaySignature,
+      amount: cart.total,
+      status: "SUCCESS",
+    });
   }
 
   // Mark Cart as CONVERTED

@@ -20,45 +20,45 @@ export default function AuditBadge({ type, size = "md" }: AuditBadgeProps) {
     switch (type) {
       case "EVENT":
         return {
-          label: "CUSTOMER EVENT",
+          label: "EVENT",
           icon: Bell,
-          className: "bg-blue-500/10 text-blue-400 border-blue-500/30",
+          className: "bg-zinc-800 text-zinc-300 border-zinc-700",
         };
       case "REASONING":
         return {
-          label: "AGENT REASONING",
+          label: "REASONING",
           icon: Brain,
-          className: "bg-purple-500/10 text-purple-400 border-purple-500/30",
+          className: "bg-zinc-800 text-zinc-300 border-zinc-700",
         };
       case "POLICY":
         return {
           label: "POLICY CHECK",
           icon: ShieldCheck,
-          className: "bg-amber-500/10 text-amber-400 border-amber-500/30",
+          className: "bg-amber-950/60 text-amber-400 border-amber-800/50",
         };
       case "ACTION":
         return {
-          label: "AGENT ACTION",
+          label: "ACTION",
           icon: Zap,
-          className: "bg-cyan-500/10 text-cyan-400 border-cyan-500/30",
+          className: "bg-zinc-800 text-white border-zinc-600",
         };
       case "SUCCESS":
         return {
           label: "SUCCESS",
           icon: CheckCircle2,
-          className: "bg-emerald-500/10 text-emerald-400 border-emerald-500/30",
+          className: "bg-emerald-950/60 text-emerald-400 border-emerald-800/50",
         };
       case "FAILURE":
         return {
           label: "FAILURE / BLOCKED",
           icon: XCircle,
-          className: "bg-rose-500/10 text-rose-400 border-rose-500/30",
+          className: "bg-red-950/60 text-red-400 border-red-800/50",
         };
       default:
         return {
           label: type,
           icon: AlertTriangle,
-          className: "bg-slate-500/10 text-slate-400 border-slate-500/30",
+          className: "bg-zinc-800 text-zinc-400 border-zinc-700",
         };
     }
   };
@@ -69,8 +69,8 @@ export default function AuditBadge({ type, size = "md" }: AuditBadgeProps) {
 
   return (
     <span
-      className={`inline-flex items-center gap-1 font-mono font-semibold uppercase rounded border ${
-        isSmall ? "text-[10px] px-1.5 py-0.5" : "text-xs px-2.5 py-1"
+      className={`inline-flex items-center gap-1 font-mono font-medium uppercase rounded border ${
+        isSmall ? "text-[10px] px-1.5 py-0.5" : "text-xs px-2 py-0.5"
       } ${config.className}`}
     >
       <Icon className={isSmall ? "w-3 h-3" : "w-3.5 h-3.5"} />

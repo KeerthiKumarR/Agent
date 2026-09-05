@@ -729,6 +729,81 @@ export const db = {
     }
   },
 
+  // ── Orders & Payments ───────────────────
+  createOrder: async (data: {
+    customerId: string;
+    cartId?: string;
+    razorpayOrderId: string;
+    amount: number;
+    currency?: string;
+    status?: string;
+    reasoning?: string;
+    itemsSummary?: any;
+  }) => {
+    try {
+      const order = await prisma.order.create({
+        data: {
+          customerId: data.customerId,
+          cartId: data.cartId,
+          razorpayOrderId: data.razorpayOrderId,
+          amount: data.amount,
+          currency: data.currency || "INR",
+          status: data.status || "PENDING",
+          reasoning: data.reasoning || "Initiated via Razorpay checkout",
+          itemsSummary: typeof data.itemsSummary === "string" 
+            ? data.itemsSummary 
+            : JSON.stringify(data.itemsSummary || []),
+        },
+      });
+      return order;
+    } catch (e) {
+      console.warn("Prisma createOrder fallback:", e);
+      return null;
+    }
+  },
+
+  updateOrderStatus: async (razorpayOrderId: string, status: string) => {
+    try {
+      return await prisma.order.update({
+        where: { razorpayOrderId },
+        data: { status },
+      });
+    } catch (e) {
+      console.warn("Prisma updateOrderStatus fallback:", e);
+      return null;
+    }
+  },
+
+  createPayment: async (data: {
+    razorpayOrderId: string;
+    razorpayPaymentId?: string;
+    razorpaySignature?: string;
+    amount: number;
+    status: "SUCCESS" | "FAILED";
+    failureReason?: string;
+  }) => {
+    try {
+      const order = await prisma.order.findUnique({
+        where: { razorpayOrderId: data.razorpayOrderId },
+      });
+      if (!order) return null;
+
+      return await prisma.payment.create({
+        data: {
+          orderId: order.id,
+          razorpayPaymentId: data.razorpayPaymentId,
+          razorpaySignature: data.razorpaySignature,
+          amount: data.amount,
+          status: data.status,
+          failureReason: data.failureReason,
+        },
+      });
+    } catch (e) {
+      console.warn("Prisma createPayment fallback:", e);
+      return null;
+    }
+  },
+
   // ── Reset ────────────────────────────────
   resetStore: async () => {
     try {
