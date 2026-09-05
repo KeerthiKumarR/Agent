@@ -285,13 +285,10 @@ export const db = {
         orderBy: { updatedAt: "desc" },
       });
 
-      if (carts.length > 0) {
-        return carts.map(mapPrismaCart);
-      }
-      return INITIAL_CARTS;
+      return carts.map(mapPrismaCart);
     } catch (e) {
       console.warn("Prisma getCarts fallback:", e);
-      return INITIAL_CARTS;
+      return [];
     }
   },
 
@@ -309,10 +306,10 @@ export const db = {
         },
       });
       if (cart) return mapPrismaCart(cart);
-      return INITIAL_CARTS.find((c) => c.id === id);
+      return undefined;
     } catch (e) {
       console.warn("Prisma getCartById fallback:", e);
-      return INITIAL_CARTS.find((c) => c.id === id);
+      return undefined;
     }
   },
 
@@ -528,13 +525,10 @@ export const db = {
         orderBy: { createdAt: "desc" },
       });
 
-      if (opps.length > 0) {
-        return opps.map(mapPrismaOpportunity);
-      }
-      return INITIAL_OPPORTUNITIES;
+      return opps.map(mapPrismaOpportunity);
     } catch (e) {
       console.warn("Prisma getOpportunities fallback:", e);
-      return INITIAL_OPPORTUNITIES;
+      return [];
     }
   },
 
@@ -637,13 +631,10 @@ export const db = {
         take: 100,
       });
 
-      if (logs.length > 0) {
-        return logs.map(mapPrismaAuditLog);
-      }
-      return INITIAL_AUDIT_LOGS;
+      return logs.map(mapPrismaAuditLog);
     } catch (e) {
       console.warn("Prisma getAuditLogs fallback:", e);
-      return INITIAL_AUDIT_LOGS;
+      return [];
     }
   },
 

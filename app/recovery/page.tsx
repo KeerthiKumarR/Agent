@@ -138,81 +138,91 @@ export default function AbandonedCartRecoveryPage() {
           </div>
 
           <div className="space-y-2.5">
-            {carts.map((cart) => {
-              const item = cart.items[0];
-              const isSelected = selectedCart?.id === cart.id;
-              const intent = calculateIntentScore(cart);
+            {carts.length === 0 ? (
+              <div className="p-8 text-center text-xs text-zinc-500 rounded-xl bg-[#121214] border border-dashed border-[#27272a]">
+                No abandoned carts found in database. When a customer leaves items in their cart, it will automatically appear here.
+              </div>
+            ) : (
+              carts.map((cart) => {
+                const item = cart.items[0];
+                const isSelected = selectedCart?.id === cart.id;
+                const intent = calculateIntentScore(cart);
 
-              return (
-                <div
-                  key={cart.id}
-                  onClick={() => setSelectedCart(cart)}
-                  className={`p-3.5 rounded-xl border cursor-pointer transition-colors space-y-3 ${
-                    isSelected
-                      ? "bg-[#18181b] border-zinc-500 shadow-sm"
-                      : "bg-[#121214] border-[#27272a] hover:border-zinc-600"
-                  }`}
-                >
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="flex items-center gap-3">
-                      <div className="relative w-12 h-12 rounded-lg overflow-hidden bg-[#18181b] shrink-0 border border-[#27272a]">
-                        {item?.product?.image && (
-                          <Image
-                            src={item.product.image}
-                            alt={item.product.name}
-                            fill
-                            className="object-cover"
-                          />
-                        )}
+                return (
+                  <div
+                    key={cart.id}
+                    onClick={() => setSelectedCart(cart)}
+                    className={`p-3.5 rounded-xl border cursor-pointer transition-colors space-y-3 ${
+                      isSelected
+                        ? "bg-[#18181b] border-zinc-500 shadow-sm"
+                        : "bg-[#121214] border-[#27272a] hover:border-zinc-600"
+                    }`}
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="flex items-center gap-3">
+                        <div className="relative w-12 h-12 rounded-lg overflow-hidden bg-[#18181b] shrink-0 border border-[#27272a]">
+                          {item?.product?.image && (
+                            <Image
+                              src={item.product.image}
+                              alt={item.product.name}
+                              fill
+                              className="object-cover"
+                            />
+                          )}
+                        </div>
+                        <div>
+                          <h4 className="text-xs font-semibold text-white truncate max-w-[170px]">
+                            {cart.customer?.name || "Customer"}
+                          </h4>
+                          <div className="text-[11px] text-zinc-400 truncate max-w-[170px]">
+                            {item?.product?.name || "Sports Gear"}
+                          </div>
+                          <div className="text-xs font-semibold text-white mt-0.5">
+                            ₹{cart.total.toLocaleString("en-IN")}
+                          </div>
+                        </div>
                       </div>
-                      <div>
-                        <h4 className="text-xs font-semibold text-white truncate max-w-[170px]">
-                          {cart.customer?.name || "Customer"}
-                        </h4>
-                        <div className="text-[11px] text-zinc-400 truncate max-w-[170px]">
-                          {item?.product?.name || "Sports Gear"}
-                        </div>
-                        <div className="text-xs font-semibold text-white mt-0.5">
-                          ₹{cart.total.toLocaleString("en-IN")}
-                        </div>
+
+                      <div className="text-right space-y-1">
+                        <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-300 border border-zinc-700 block">
+                          {cart.inactivityDuration}m Inactive
+                        </span>
+                        <span className="text-[11px] font-semibold text-emerald-400 block">
+                          Intent: {intent.score}%
+                        </span>
                       </div>
                     </div>
 
-                    <div className="text-right space-y-1">
-                      <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-300 border border-zinc-700 block">
-                        {cart.inactivityDuration}m Inactive
+                    <div className="pt-2 border-t border-[#27272a] flex items-center justify-between">
+                      <span className="text-[10px] text-zinc-500">
+                        Views: {cart.productViews} • Dwell: {cart.timeSpentMinutes}m
                       </span>
-                      <span className="text-[11px] font-semibold text-emerald-400 block">
-                        Intent: {intent.score}%
-                      </span>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleAnalyzeCart(cart);
+                        }}
+                        disabled={isAnalyzing}
+                        className="px-2.5 py-1 rounded bg-[#18181b] hover:bg-zinc-700 text-zinc-200 hover:text-white text-xs font-medium flex items-center gap-1 border border-zinc-700 transition-colors"
+                      >
+                        <Brain className="w-3 h-3" />
+                        <span>Ask Agent to Analyze</span>
+                      </button>
                     </div>
                   </div>
-
-                  <div className="pt-2 border-t border-[#27272a] flex items-center justify-between">
-                    <span className="text-[10px] text-zinc-500">
-                      Views: {cart.productViews} • Dwell: {cart.timeSpentMinutes}m
-                    </span>
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleAnalyzeCart(cart);
-                      }}
-                      disabled={isAnalyzing}
-                      className="px-2.5 py-1 rounded bg-[#18181b] hover:bg-zinc-700 text-zinc-200 hover:text-white text-xs font-medium flex items-center gap-1 border border-zinc-700 transition-colors"
-                    >
-                      <Brain className="w-3 h-3" />
-                      <span>Ask Agent to Analyze</span>
-                    </button>
-                  </div>
-                </div>
-              );
-            })}
+                );
+              })
+            )}
           </div>
         </div>
 
         {/* RIGHT COLUMN: DETAILED 6-STEP AGENT REASONING WORKSPACE (7 COLS) */}
         <div className="lg:col-span-7 space-y-5">
-          {selectedCart && (
+          {!selectedCart ? (
+            <div className="p-12 text-center text-xs text-zinc-500 rounded-xl bg-[#121214] border border-dashed border-[#27272a]">
+              Select an abandoned cart from the queue to run the 6-step autonomous recovery loop.
+            </div>
+          ) : (
             <>
               {/* Telemetry Summary Card */}
               {(() => {
