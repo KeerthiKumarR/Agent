@@ -9,14 +9,22 @@ export async function GET() {
     const auditLogs = await db.getAuditLogs();
     const campaigns = await db.getCampaigns();
 
-    // Calculated Dashboard Metrics
-    const totalRevenue = 248500;
-    const recoveredRevenue = 34200;
+    // Calculated Real Database Metrics
+    const totalRevenue = carts
+      .filter((c) => c.status === "CONVERTED")
+      .reduce((sum, c) => sum + (c.total || c.items?.reduce((isum, item) => isum + item.price * item.quantity, 0) || 0), 0);
+    const recoveredRevenue = totalRevenue;
     const abandonedCartsCount = carts.filter(
       (c) => c.status === "ABANDONED",
     ).length;
-    const recoveryRate = 18.4;
-    const upsellRevenue = 14800;
+    const recoveredCount = carts.filter((c) => c.status === "CONVERTED" || c.status === "RESTORED").length;
+    const totalCartsEvaluated = abandonedCartsCount + recoveredCount;
+    const recoveryRate = totalCartsEvaluated > 0
+      ? Math.round((recoveredCount / totalCartsEvaluated) * 100 * 10) / 10
+      : 0;
+    const upsellRevenue = carts
+      .filter((c) => (c.status === "CONVERTED" || c.status === "RESTORED") && c.items && c.items.length > 1)
+      .reduce((sum, c) => sum + (c.items[c.items.length - 1]?.price || 0), 0);
     const agentActionsToday = auditLogs.filter(
       (l) => l.type === "ACTION" || l.type === "POLICY",
     ).length;

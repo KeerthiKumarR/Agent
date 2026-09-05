@@ -60,17 +60,24 @@ export default function Navbar({ onOpenDemoControls }: NavbarProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
         {/* Brand Logo */}
         <Link href="/" className="flex items-center gap-2.5 group">
-          <div className="w-7 h-7 rounded-lg bg-white text-black flex items-center justify-center font-bold text-sm tracking-tight transition-transform group-hover:scale-105">
-            <Command className="w-4 h-4" />
+          <div className="w-7 h-7 rounded-md bg-white flex items-center justify-center transition-transform group-hover:scale-105 shadow-sm">
+            <svg
+              className="w-4 h-4 text-black"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M12 2L2 7l10 5 10-5-10-5z" />
+              <path d="M2 17l10 5 10-5" />
+              <path d="M2 12l10 5 10-5" />
+            </svg>
           </div>
-          <div className="flex items-baseline gap-1.5">
-            <span className="font-semibold text-sm tracking-tight text-white">
-              CommercePilot
-            </span>
-            <span className="text-[10px] text-zinc-500 font-mono">
-              Enterprise
-            </span>
-          </div>
+          <span className="font-semibold text-sm tracking-tight text-white group-hover:text-zinc-200 transition-colors">
+            CommercePilot
+          </span>
         </Link>
 
         {/* Navigation Links */}

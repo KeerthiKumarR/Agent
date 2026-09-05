@@ -92,23 +92,23 @@ export default function LandingPage() {
             </Link>
           </div>
 
-          {/* Key Metrics */}
+          {/* Key Capabilities */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 pt-8 border-t border-[#27272a]">
-            <div className="p-4 rounded-lg bg-[#121214] border border-[#27272a] text-left">
-              <div className="text-xl font-bold text-white">₹2,48,500</div>
-              <div className="text-xs text-zinc-400 mt-0.5">Tracked Revenue</div>
+            <div className="p-3.5 rounded-lg bg-[#121214] border border-[#27272a] text-left">
+              <div className="text-xs font-semibold text-white">Live Telemetry</div>
+              <div className="text-[11px] text-zinc-400 mt-0.5">Real-time cart dwell & intent scoring</div>
             </div>
-            <div className="p-4 rounded-lg bg-[#121214] border border-[#27272a] text-left">
-              <div className="text-xl font-bold text-emerald-400">₹34,200</div>
-              <div className="text-xs text-zinc-400 mt-0.5">Recovered Revenue</div>
+            <div className="p-3.5 rounded-lg bg-[#121214] border border-[#27272a] text-left">
+              <div className="text-xs font-semibold text-white">Deterministic Guardrails</div>
+              <div className="text-[11px] text-zinc-400 mt-0.5">Zero spam & strict merchant policy caps</div>
             </div>
-            <div className="p-4 rounded-lg bg-[#121214] border border-[#27272a] text-left">
-              <div className="text-xl font-bold text-white">18.4%</div>
-              <div className="text-xs text-zinc-400 mt-0.5">Recovery Rate</div>
+            <div className="p-3.5 rounded-lg bg-[#121214] border border-[#27272a] text-left">
+              <div className="text-xs font-semibold text-white">Bounded Payments</div>
+              <div className="text-[11px] text-zinc-400 mt-0.5">Zero silent charges, HMAC-verified</div>
             </div>
-            <div className="p-4 rounded-lg bg-[#121214] border border-[#27272a] text-left">
-              <div className="text-xl font-bold text-zinc-200">100%</div>
-              <div className="text-xs text-zinc-400 mt-0.5">Bounded & Audited</div>
+            <div className="p-3.5 rounded-lg bg-[#121214] border border-[#27272a] text-left">
+              <div className="text-xs font-semibold text-white">Explainable Ledger</div>
+              <div className="text-[11px] text-zinc-400 mt-0.5">Immutable audit trail in Supabase</div>
             </div>
           </div>
         </section>

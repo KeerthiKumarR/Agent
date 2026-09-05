@@ -97,12 +97,12 @@ export default function MerchantDashboard() {
   };
 
   const metrics = data?.metrics || {
-    totalRevenue: 248500,
-    recoveredRevenue: 34200,
-    abandonedCartsCount: 23,
-    recoveryRate: 18.4,
-    upsellRevenue: 14800,
-    agentActionsToday: 38,
+    totalRevenue: 0,
+    recoveredRevenue: 0,
+    abandonedCartsCount: 0,
+    recoveryRate: 0,
+    upsellRevenue: 0,
+    agentActionsToday: 0,
   };
 
   const opportunities: RevenueOpportunity[] = data?.opportunities || [];
@@ -154,8 +154,8 @@ export default function MerchantDashboard() {
           <div className="text-xl font-bold text-white">
             ₹{metrics.totalRevenue.toLocaleString("en-IN")}
           </div>
-          <div className="text-[11px] text-emerald-400 flex items-center gap-1 font-medium">
-            <TrendingUp className="w-3 h-3" /> +14.8% vs last mo
+          <div className="text-[11px] text-zinc-400 font-medium">
+            Real-time verified
           </div>
         </div>
 
@@ -169,7 +169,7 @@ export default function MerchantDashboard() {
             ₹{metrics.recoveredRevenue.toLocaleString("en-IN")}
           </div>
           <div className="text-[11px] text-zinc-400 font-medium">
-            13.7% of total revenue
+            Autonomous recovery
           </div>
         </div>
 
@@ -183,7 +183,7 @@ export default function MerchantDashboard() {
             {metrics.abandonedCartsCount}
           </div>
           <div className="text-[11px] text-amber-400 font-medium">
-            ₹1,14,500 at risk
+            Awaiting recovery
           </div>
         </div>
 
@@ -196,8 +196,8 @@ export default function MerchantDashboard() {
           <div className="text-xl font-bold text-white">
             {metrics.recoveryRate}%
           </div>
-          <div className="text-[11px] text-emerald-400 font-medium">
-            +3.2% vs benchmark
+          <div className="text-[11px] text-zinc-400 font-medium">
+            Conversion ratio
           </div>
         </div>
 
@@ -211,7 +211,7 @@ export default function MerchantDashboard() {
             ₹{metrics.upsellRevenue.toLocaleString("en-IN")}
           </div>
           <div className="text-[11px] text-zinc-400 font-medium">
-            96% co-purchase match
+            AI recommendations
           </div>
         </div>
 
@@ -222,7 +222,7 @@ export default function MerchantDashboard() {
             <Zap className="w-4 h-4 text-zinc-300" />
           </div>
           <div className="text-xl font-bold text-white">
-            {metrics.agentActionsToday} Today
+            {metrics.agentActionsToday}
           </div>
           <div className="text-[11px] text-zinc-400 font-medium">
             100% Policy Checked
@@ -377,49 +377,55 @@ export default function MerchantDashboard() {
           </div>
 
           <div className="space-y-2.5">
-            {opportunities.map((opp) => (
-              <div
-                key={opp.id}
-                className="p-3.5 rounded-lg bg-[#18181b] border border-[#27272a] space-y-2.5"
-              >
-                <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-mono font-medium px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-300 border border-zinc-700 uppercase">
-                    {opp.urgency} Priority
-                  </span>
-                  <span className="text-xs font-semibold text-white">
-                    ₹{opp.cartValue.toLocaleString("en-IN")}
-                  </span>
-                </div>
-
-                <div className="text-xs text-zinc-300">
-                  Customer: <span className="text-white font-medium">{opp.customerName}</span> • Intent Score: <span className="text-emerald-400 font-mono font-semibold">{opp.intentScore}%</span>
-                </div>
-
-                <div className="text-xs text-zinc-400 bg-black/40 p-2 rounded border border-white/5">
-                  <span className="text-zinc-200 font-medium">
-                    Recommended:
-                  </span>{" "}
-                  {opp.recommendedAction}
-                </div>
-
-                <div className="flex items-center justify-between pt-1">
-                  <button
-                    onClick={() => setSelectedOpportunity(opp)}
-                    className="text-xs text-zinc-400 hover:text-white flex items-center gap-1 font-medium transition-colors"
-                  >
-                    <Eye className="w-3.5 h-3.5" />
-                    Agent Reasoning
-                  </button>
-
-                  <Link
-                    href={`/recovery?cartId=${opp.cartId}`}
-                    className="px-2.5 py-1 rounded bg-zinc-800 hover:bg-zinc-700 text-white text-xs font-medium border border-zinc-700 transition-colors"
-                  >
-                    Trigger Recovery
-                  </Link>
-                </div>
+            {opportunities.length === 0 ? (
+              <div className="p-8 text-center text-xs text-zinc-500 rounded-lg bg-[#18181b]/50 border border-dashed border-[#27272a]">
+                No active revenue opportunities detected. Abandoned carts will automatically appear here.
               </div>
-            ))}
+            ) : (
+              opportunities.map((opp) => (
+                <div
+                  key={opp.id}
+                  className="p-3.5 rounded-lg bg-[#18181b] border border-[#27272a] space-y-2.5"
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-mono font-medium px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-300 border border-zinc-700 uppercase">
+                      {opp.urgency} Priority
+                    </span>
+                    <span className="text-xs font-semibold text-white">
+                      ₹{opp.cartValue.toLocaleString("en-IN")}
+                    </span>
+                  </div>
+
+                  <div className="text-xs text-zinc-300">
+                    Customer: <span className="text-white font-medium">{opp.customerName}</span> • Intent Score: <span className="text-emerald-400 font-mono font-semibold">{opp.intentScore}%</span>
+                  </div>
+
+                  <div className="text-xs text-zinc-400 bg-black/40 p-2 rounded border border-white/5">
+                    <span className="text-zinc-200 font-medium">
+                      Recommended:
+                    </span>{" "}
+                    {opp.recommendedAction}
+                  </div>
+
+                  <div className="flex items-center justify-between pt-1">
+                    <button
+                      onClick={() => setSelectedOpportunity(opp)}
+                      className="text-xs text-zinc-400 hover:text-white flex items-center gap-1 font-medium transition-colors"
+                    >
+                      <Eye className="w-3.5 h-3.5" />
+                      Agent Reasoning
+                    </button>
+
+                    <Link
+                      href={`/recovery?cartId=${opp.cartId}`}
+                      className="px-2.5 py-1 rounded bg-zinc-800 hover:bg-zinc-700 text-white text-xs font-medium border border-zinc-700 transition-colors"
+                    >
+                      Trigger Recovery
+                    </Link>
+                  </div>
+                </div>
+              ))
+            )}
           </div>
         </div>
 
@@ -439,23 +445,27 @@ export default function MerchantDashboard() {
           </div>
 
           <div className="space-y-2 max-h-[360px] overflow-y-auto pr-1">
-            {activityLogs.map((log) => (
-              <div
-                key={log.id}
-                className="p-2.5 rounded-lg bg-[#18181b] border border-[#27272a] text-xs space-y-1"
-              >
-                <div className="flex items-center justify-between gap-2">
-                  <AuditBadge type={log.type} size="sm" />
-                  <span className="text-[10px] font-mono text-zinc-500">
-                    {new Date(log.timestamp).toLocaleTimeString()}
-                  </span>
-                </div>
-                <div className="font-medium text-white">{log.title}</div>
-                <div className="text-zinc-400 text-[11px] leading-relaxed">
-                  {log.detail}
-                </div>
+            {activityLogs.length === 0 ? (
+              <div className="p-8 text-center text-xs text-zinc-500 rounded-lg bg-[#18181b]/50 border border-dashed border-[#27272a]">
+                No agent activities logged yet. Interactions will stream live into this ledger.
               </div>
-            ))}
+            ) : (
+              activityLogs.map((log) => (
+                <div
+                  key={log.id}
+                  className="p-2.5 rounded-lg bg-[#18181b] border border-[#27272a] text-xs space-y-1"
+                >
+                  <div className="flex items-center justify-between gap-2">
+                    <AuditBadge type={log.type} size="sm" />
+                    <span className="text-[10px] font-mono text-zinc-500">
+                      {new Date(log.timestamp).toLocaleTimeString()}
+                    </span>
+                  </div>
+                  <div className="text-white font-medium text-xs">{log.title}</div>
+                  <div className="text-[11px] text-zinc-400">{log.detail}</div>
+                </div>
+              ))
+            )}
           </div>
         </div>
       </div>
